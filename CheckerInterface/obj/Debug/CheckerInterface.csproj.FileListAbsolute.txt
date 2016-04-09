@@ -1,0 +1,9 @@
+C:\Important\GoogleDrive\CLASS\438 ai\project\CheckerInterface\CheckerInterface\bin\Debug\CheckerInterface.exe.config
+C:\Important\GoogleDrive\CLASS\438 ai\project\CheckerInterface\CheckerInterface\bin\Debug\CheckerInterface.exe
+C:\Important\GoogleDrive\CLASS\438 ai\project\CheckerInterface\CheckerInterface\bin\Debug\CheckerInterface.pdb
+C:\Important\GoogleDrive\CLASS\438 ai\project\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.csprojResolveAssemblyReference.cache
+C:\Important\GoogleDrive\CLASS\438 ai\project\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.Interface.resources
+C:\Important\GoogleDrive\CLASS\438 ai\project\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.Properties.Resources.resources
+C:\Important\GoogleDrive\CLASS\438 ai\project\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.csproj.GenerateResource.Cache
+C:\Important\GoogleDrive\CLASS\438 ai\project\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.exe
+C:\Important\GoogleDrive\CLASS\438 ai\project\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.pdb
