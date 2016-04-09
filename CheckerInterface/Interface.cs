@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 namespace CheckerInterface
 {
 
@@ -19,6 +20,60 @@ namespace CheckerInterface
             radioHuman1.Checked = true;
             radioHuman2.Checked = true;
         }
+
+        ///////////////////////////////////////////////
+
+        Board berd = new Board();
+        Move cur;
+
+
+
+        void humanTurn()
+        {
+            berd.getBoard(ref berd.b);
+            /*
+            this.enableValids(0);
+
+            while(!globalClick1){}
+            
+            this.enableValids(1); //does it on cur.s
+
+            Point temp = click2 //wait for click event
+
+
+            if (berd[temp.r, temp.c] == 1)
+            {
+                cur.s = temp;
+                disableAll();
+                enableValids(0);
+                enableValids(1);
+            }
+	        else
+	        {
+
+		        cur.d = click2; //wait for click event
+		        while(putMove(cur.s, cur.d))
+		        {
+			        cur.s = cur.d;
+			        cur.d = NULL;
+			        disableAll();
+			        enableValids(1);
+			        cur.d = click2; //wait for click event
+		        }
+	        }
+            */
+        }
+
+        ///////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
 
         private void radioComputer2_CheckedChanged(object sender, EventArgs e)
         {

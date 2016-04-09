@@ -6,45 +6,258 @@ using System.Threading.Tasks;
 
 namespace CheckerInterface
 {
+    public struct Point {
+        public int r, c;
+        public Point(int row, int col) {
+            r = row;
+            c = col;
+        }
+    };
+    public struct Move
+    {
+        public Point s, d;
+        public Move(Point src, Point dest) {
+            s = src;
+            d = dest;
+        }
+    }
+
     class Board
     {
         public int turn;
-        private char[,] b;
-        //[0] row [1] col
-        int[] peice = new int[2]; 
+        public int[,] b;
+        public List<Move> validMoves;
         
-
-        Board()
+        public Board()
         {
             turn = 1;
-            b = new char[8, 8]     {{'x','r','x','r','x','r','x','r'},
-                                    {'r','x','r','x','r','x','r','x'},
-                                    {'x','r','x','r','x','r','x','r'},
-                                    {' ','x',' ','x',' ','x',' ','x'},
-                                    {'x',' ','x',' ','x',' ','x',' '},
-                                    {'b','x','b','x','b','x','b','x'},
-                                    {'x','b','x','b','x','b','x','b'},
-                                    {'b','x','b','x','b','x','b','x'}}; 
-                       
+            b = new int[8, 8]     {{9,-1,9,-1,9,-1,9,-1},
+                                    {-1,9,-1,9,-1,9,-1,9},
+                                    {9,-1,9,-1,9,-1,9,-1},
+                                    {0,9,0,9,0,9,0,9},
+                                    {9,0,9,0,9,0,9,0},
+                                    {1,9,1,9,1,9,1,9},
+                                    {9,1,9,1,9,1,9,1},
+                                    {1,9,1,9,1,9,1,9}};
+
         }
 
-        void getBoard(ref char[,] bird) {
-            bird = b;
+        public void getBoard(ref int[,] board)
+        {
+            flipBoard();
+            validMoves.Clear();
+            fillValidMoves();
+            this.b.CopyTo(board,0);
         }
 
-        int putMove( int c, int r) {
-
-            return 1;
+        public bool putMove(Move m)
+        {
+            if (this.validMoves.Contains(m))
+            {
+                this.updateBoard(m);
+                this.validMoves.Clear();
+                return findJumps(m.d);
+            }
+            else
+            {
+                //you dun goofed
+                return false; 
+            }
         }
 
-        void selectPeice(int r, int c) {
-            this.peice[0] = r;
-            this.peice[1] = c;
+        void flipBoard()
+        {
+            rotate90();
+            rotate90();
+            for (int r = 0; r < 8; r++)
+            {
+                for (int c = 0; c < 8; c++)
+                {
+                    b[r, c] = -(b[r, c]);
+                }
+            }
         }
-               
 
+        void rotate90()
+        {
+            int[,] ret = new int[8, 8];
 
+            for (int i = 0; i < 8; ++i)
+            {
+                for (int j = 0; j < 8; ++j)
+                {
+                    ret[i, j] = b[8 - j - 1, i];
+                }
+            }
+            ret.CopyTo(b,0);
+        }
 
+        void fillValidMoves()
+        {
+            Point p;
+            bool forced = false;
+            for (int r = 0; r < 8; r++)
+            {
+                for (int c = 0; c < 8; c++)
+                {
+                    if (b[r, c] == 1)
+                    {
+                        if (forced)
+                        {
+                            p.r = r;
+                            p.c = c;
+                            findJumps(p);
+                        }
+                        else
+                        {
+                            p.r = r;
+                            p.c = c;
+                            if (findJumps(p))
+                            {
+                                forced = true;
+                                validMoves.Clear();
+                                findJumps(p);
+                            }
+                            else
+                            {
+                                findMoves(p);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        bool findJumps(Point p) {
+            bool found = false;
+
+            if (b[p.r, p.c] == 2)
+            {
+                //check back diag left  for oppo and back double diag left  for empty
+                if (b[p.r + 1, p.c - 1] == -1 && (b[p.r + 2, p.c - 2] == 0))
+                {
+                    //add Move(piece, that double diag)
+                    validMoves.Add(new Move(new Point(p.r, p.c), new Point(p.r + 2, p.c - 2)));
+                    found = true;
+                }
+
+                //check back diag right for oppo and back double diag right for empty
+                if (b[p.r + 1, p.c + 1] == -1 && (b[p.r + 2, p.c + 2] == 0))
+                {
+                    //add Move(piece, that double diag)
+                    validMoves.Add(new Move(new Point(p.r, p.c), new Point(p.r + 2, p.c + 2)));
+                    found = true;
+                }
+            }
+
+            if (b[p.r, p.c] == 2 || b[p.r, p.c] == 1)
+            {
+                //check front left diag for oppo and front left  double diag for empty
+                if (b[p.r - 1, p.c - 1] == -1 && (b[p.r - 2, p.c - 2] == 0))
+                {
+                    //add Move(piece, that double diag)
+                    validMoves.Add(new Move(new Point(p.r, p.c), new Point(p.r - 2, p.c - 2)));
+                    found = true;
+                }
+
+                //check front right diag for oppo and front right double diag for empty
+                if (b[p.r - 1, p.c + 1] == -1 && (b[p.r - 2, p.c + 2] == 0))
+                {
+                    //add Move(piece, that double diag)
+                    validMoves.Add(new Move(new Point(p.r, p.c), new Point(p.r - 2, p.c + 2)));
+                    found = true;
+                }
+            }
+            return found;
+        }
+
+        bool findMoves(Point p)
+        {
+            bool found = false;
+            if (b[p.r, p.c] == 2)
+            {
+                //check back diag left  for oppo and back double diag left  for empty
+                if (b[p.r + 1, p.c - 1] == 0)
+                {
+                    //add Move(piece, that double diag)
+                    validMoves.Add(new Move(new Point(p.r, p.c), new Point(p.r + 1, p.c - 1)));
+                    found = true;
+                }
+
+                //check back diag right for oppo and back double diag right for empty
+                if (b[p.r + 1, p.c + 1] == 0)
+                {
+                    //add Move(piece, that double diag)
+                    validMoves.Add(new Move(new Point(p.r, p.c), new Point(p.r + 1, p.c + 1)));
+                    found = true;
+                }
+            }
+
+            if (b[p.r, p.c] == 2 || b[p.r, p.c] == 1)
+            {
+                //check front left diag for oppo and front left  double diag for empty
+                if (b[p.r - 1, p.c - 1] == 0)
+                {
+                    //add Move(piece, that double diag)
+                    validMoves.Add(new Move(new Point(p.r, p.c), new Point(p.r - 1, p.c - 1)));
+                    found = true;
+                }
+
+                //check front right diag for oppo and front right double diag for empty
+                if (b[p.r - 1, p.c + 1] == 0)
+                {
+                    //add Move(piece, that double diag)
+                    validMoves.Add(new Move(new Point(p.r, p.c), new Point(p.r - 1, p.c + 1)));
+                    found = true;
+                }
+
+            }
+            return found;
+        }
+
+        void updateBoard(Move m)
+        {
+            if (Math.Abs(m.d.r - m.s.r) == 1)
+            {
+                b[m.d.r, m.d.c] = 1;
+                b[m.s.r, m.s.c] = 0;
+            }
+            else if (Math.Abs(m.d.r - m.s.r) == 2)
+            {
+                b[m.d.r, m.d.c] = 1;
+                b[m.s.r, m.s.c] = 0;
+                int kr = (m.d.r - m.s.r) / 2 + m.s.r;
+                int kc = (m.d.c - m.s.c) / 2 + m.s.c;
+
+                b[kr, kc] = 0;
+            }
+            if (m.d.r == 0)
+            {
+                b[m.d.r, m.d.c] = 2;
+            }
+        }
+
+        bool over()
+        {
+            //check if pieces from both players exist
+            bool red = false;
+            bool black = false;
+            for (int r = 0; r < 8; r++)
+            {
+                for (int c = 0; c < 8; c++)
+                {
+                    if (b[r,c] == -1)
+                    { red = true; }
+                    else if (b[r, c] == 1)
+                    { black = true; }
+                    if (red && black)
+                    { return true;}
+                }
+                return false;
+            }
+            return false;
+        }
+    
     }
 
 
