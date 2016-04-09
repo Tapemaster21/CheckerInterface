@@ -737,6 +737,7 @@
             this.pictureBox20.BackColor = System.Drawing.Color.Tan;
             this.pictureBox20.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBox20.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pictureBox20.Enabled = false;
             this.pictureBox20.Location = new System.Drawing.Point(236, 180);
             this.pictureBox20.Name = "pictureBox20";
             this.pictureBox20.Size = new System.Drawing.Size(55, 55);

@@ -1,0 +1,208 @@
+self = positive
+oppo = negative
+
+
+// play
+
+get board
+check if you have foced moves
+	select force moves piece
+	do those moves
+if no forced, pick random piece
+move random left/right (if possible)
+
+
+WHEN PUTMOVE RETURNS FALSE TURN CHANGES
+
+//----- game ------------------------------------------
+
+struct Point 
+	int r
+	int c
+
+struct Move
+	point s
+	point d
+
+.class Board
+{
+	int[8,8] board;
+	Move[] validMoves;
+
+	void getBoard(Board &theirs)
+	{
+		flipBoard();
+		clear validMoves;
+		fillValidMoves();
+		theirs = board;
+	}
+
+
+	bool putMove(Move do)
+	{
+		if( do is in validMoves )
+			updateBoard();
+			clear validMoves;
+			return findJumps(do.dest);
+		else 
+			game over
+
+	}
+
+
+
+	void fillValidMoves()
+		bool forced
+		for every self Point piece
+			if( forced )
+				if findJumps(piece) # this fills valid moves
+			else # not forced
+				if( findJumps(piece) )
+					forced = true 
+					clear validMoves
+					findJumps(piece)
+				else 
+					findMoves(piece)
+
+
+	bool findJumps(Point piece)
+		bool found = false;
+		switch (piece)
+		{
+			case 2:
+				check back diag left  for oppo and back double diag left  for empty
+					add Move(piece, that double diag)
+					found = true
+
+				check back diag right for oppo and back double diag right for empty
+					add Move(piece, that double diag)
+					found = true
+
+			case 1:
+				check front left  diag for oppo and front left  double diag for empty
+					add Move(piece, that double diag)
+					found = true
+
+				check front right diag for oppo and front right double diag for empty
+					add Move(piece, that double diag)
+					found = true
+				break;
+
+			return found;
+		}
+
+
+	bool findMoves(Point piece)
+	{
+		bool found = false;
+		switch (piece)
+		{
+			case 2:
+				check back left  diags for empty
+					add Move(piece, that double diag)
+					found = true
+				
+				check back right diags for empty
+					add Move(piece, that double diag)
+					found = true
+
+			case 1:
+				check front left  diag for empty
+					add Move(piece, that double diag)
+					found = true
+				
+				check front right diag for empty
+					add Move(piece, that double diag)
+					found = true
+				
+				break;
+		}
+
+		return found;
+	}
+
+	void updateBoard(Move do)
+	{
+		if(abs(dest.r - source.r) == 1)
+		{
+			board[ d.r, d.c ] = 1;
+			board[ s.r, s.c ] = 0;
+		}
+		else if(abs(dest.r - source.r) == 2)
+		{
+			board[ d.r, d.c ] = 1;
+			board[ s.r, s.c ] = 0;
+			int kr = (d.r - s.r)/2 + s.r;
+			int kc = (d.c - s.c)/2 + s.c;
+
+			board[ kr, kc ] = 0;
+		}
+
+		if(dest.r == 0)
+		{	
+			board[d.r,d.c] = 2
+		}
+
+	}
+
+
+	bool over()
+	{
+		#check if pieces from both players exist
+		bool red
+		bool black
+		for(spots r c)
+		{
+			if spot == red
+				red = true
+			else if spot == black
+				black = true
+			if(red & black)
+				return true
+		}
+		return false;
+	}
+
+
+
+}
+
+
+
+
+
+
+//------- form --------------------
+Board berd = new Board();
+Move cur;
+
+
+
+void humanTurn()
+{
+	berd.getBoard()
+	this.enableValids(0);
+	cur.s = click1
+	enableValids(1); //does it on cur.s
+
+	Point temp = click2
+	if(berd[t.r, t.c] == 1) #if self
+	{
+		cur.s = t;
+		disableAll();
+		enableValids(0);
+		enableValids(1);
+	}
+	else
+	{
+		cur.d = click2;
+		while(putMove(cur.s, cur.d))
+		{
+			cur.s = cur.d;
+			cur.d = NULL;
+			disableAll();
+			enableValids(1);
+			cur.d = click2;
+		}
+	}
+}
