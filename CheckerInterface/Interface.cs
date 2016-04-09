@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace CheckerInterface
 {
+
     public partial class Interface : Form
     {
         public Interface()
@@ -56,6 +57,11 @@ namespace CheckerInterface
         {
             openFileDialog1.ShowDialog();
             browseBox1.Text = openFileDialog1.FileName;
+        }
+
+        private void pictureBox45_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
