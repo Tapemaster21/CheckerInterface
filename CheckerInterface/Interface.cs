@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,27 +17,26 @@ namespace CheckerInterface
     {
         Board berd;
         Move cur;
-        Bitmap red, black;
-        int player1, player2;
+        Bitmap red, black, redQ, blackQ;
+        bool player1 = false;
+        bool player2 = false;
+        FileSystemWatcher watcher;
+        bool jumpMode = false;
 
 
         public Interface()
         {
             InitializeComponent();
+            System.IO.File.Create("./move.txt").Close();
+            System.IO.File.Create("./board.txt").Close();
+
             radioHuman1.Checked = true;
             radioHuman2.Checked = true;
             red = new Bitmap(CheckerInterface.Properties.Resources.Red);
             black = new Bitmap(CheckerInterface.Properties.Resources.Black);
-
-        }
-        
-        void go()
-        {
-            berd.getBoard(ref berd.b);
-            this.placeCheckers();
-
-            this.disableAll();
-            this.enableValids(0);
+            redQ = new Bitmap(CheckerInterface.Properties.Resources.RedQ);
+            blackQ = new Bitmap(CheckerInterface.Properties.Resources.BlackQ);
+            buttonReset.Enabled = false;
         }
 
         void enableValids(int val)
@@ -56,7 +56,7 @@ namespace CheckerInterface
                         switch(val)
                         {
                             case 0:
-                                if(berd.b[r,c] == 1)
+                                if(berd.b[r,c] == 1 || berd.b[r, c] == 2)
                                 {
                                     if (berd.validMoves != null)
                                     {
@@ -168,6 +168,14 @@ namespace CheckerInterface
                             {
                                 spot.BackgroundImage = black;
                             }
+                            else if (berd.b[r, c] == -2)
+                            {
+                                spot.BackgroundImage = redQ;
+                            }
+                            else if (berd.b[r, c] == 2)
+                            {
+                                spot.BackgroundImage = blackQ;
+                            }
                             else
                             {
                                 spot.BackgroundImage = null;
@@ -183,6 +191,14 @@ namespace CheckerInterface
                             {
                                 spot.BackgroundImage = black;
                             }
+                            else if (berd.b[r, c] == 2)
+                            {
+                                spot.BackgroundImage = redQ;
+                            }
+                            else if (berd.b[r, c] == -2)
+                            {
+                                spot.BackgroundImage = blackQ;
+                            }
                             else
                             {
                                 spot.BackgroundImage = null;
@@ -196,72 +212,7 @@ namespace CheckerInterface
             }
             if (berd.turn == 1){ berd.rotate180(); }
         }
-
-        private void radioHuman1_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radioComputer1.Checked)
-            {
-                player1 = 1;
-                label1.Show();
-                browseBox1.Show();
-            }
-            else
-            {
-                player1 = 0;
-                label1.Hide();
-                browseBox1.Hide();
-            }
-        }
-
-        private void radioHuman2_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radioComputer2.Checked)
-            {
-                player2 = 1;
-                label2.Show();
-                browseBox2.Show();
-            }
-            else
-            {
-                player2 = 0;
-                label2.Hide();
-                browseBox2.Hide();
-            }
-        }
-
-        private void browseBox1_MouseClick(object sender, MouseEventArgs e)
-        {
-            openFileDialog1.ShowDialog();
-            browseBox1.Text = openFileDialog1.FileName;
-        }
-
-        private void browseBox2_Click(object sender, EventArgs e)
-        {
-            openFileDialog1.ShowDialog();
-            browseBox2.Text = openFileDialog1.FileName;
-        }
-
-        private void buttonStart_Click(object sender, EventArgs e)
-        {
-            berd = new Board();
-            
-            this.go();
-        }
-
-        private void buttonReset_Click(object sender, EventArgs e)
-        {
-            berd.b = new int[8, 8]  {{9,0,9,0,9,0,9,0},
-                                    {0,9,0,9,0,9,0,9},
-                                    {9,0,9,0,9,0,9,0},
-                                    {0,9,0,9,0,9,0,9},
-                                    {9,0,9,0,9,0,9,0},
-                                    {0,9,0,9,0,9,0,9},
-                                    {9,0,9,0,9,0,9,0},
-                                    {0,9,0,9,0,9,0,9}};
-            this.placeCheckers();
-            this.disableAll();
-        }
-
+        
         private void click(int r, int c)
         {
             if (berd.turn == 1)
@@ -271,8 +222,7 @@ namespace CheckerInterface
             }
             if (berd.validMoves == null)
             { MessageBox.Show("you done did it now"); }
-
-            bool moved = false;
+            
 
             List<Move> temp = new List<Move>(berd.validMoves);
             foreach (Move m in temp)
@@ -312,42 +262,191 @@ namespace CheckerInterface
                     }
                     else if (m.d.r == r && m.d.c == c) // if click in move spot
                     {
-                        
+                        //MessageBox.Show("curs "+cur.s.r + "," + cur.s.c);
                         cur.d = new Point(r, c);
                         if(berd.putMove(cur.s, cur.d)) // if you have a second jump
                         {
-                            this.enableValids(2);
+                            if ((!player1 && berd.turn == -1) || (!player2 && berd.turn == 1))
+                            {
+                                makeWatcher();
+                                this.placeCheckers();
+                                jumpMode = true;
+                                cur.s = cur.d;
+                                cur.d = new Point();
+                            }
+                            else
+                            {
+                                this.enableValids(2);
 
-                            this.placeCheckers();
-                            spotd.BackColor = Color.Cyan;
-                            cur.s = cur.d;
-                            cur.d = new Point();
+                                this.placeCheckers();
+                                spotd.BackColor = Color.Cyan;
+                                cur.s = cur.d;
+                                cur.d = new Point();
 
-                            this.enableValids(1);
+                                this.enableValids(1);
+                            }
                         }
                         else // you're done
                         {
                             this.enableValids(2);
-                            moved = true;
+                            
                             cur = new Move();
+                            berd.getBoard(ref berd.b);
+                            this.placeCheckers();
+                            if (berd.over())
+                            {
+                                string player = (berd.turn == -1 ? "Player 2 " : "Player 1 ");
+                                MessageBox.Show(player + "won!");
+                            }
+                            else
+                            {
+                                this.enableValids(0);
+                            }
+                            return;
                         }
-                        //this.go();
                     }
                     else
                     {
                         //  This is just a catch. There should never be a time where 
                         //  click is called and it isn't in a green spot
                         //  due to how we enable and disable positions.
-                        
                     }
                 }
             }
-
-            if(moved)
+        }
+        
+        private void radioHuman1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioComputer1.Checked)
             {
-                berd.getBoard(ref berd.b);
-                this.placeCheckers();
+                player1 = false;
+                label1.Show();
+                browseBox1.Show();
+            }
+            else
+            {
+                player1 = true;
+                label1.Hide();
+                browseBox1.Hide();
+            }
+        }
+
+        private void radioHuman2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioComputer2.Checked)
+            {
+                player2 = false;
+                label2.Show();
+                browseBox2.Show();
+            }
+            else
+            {
+                player2 = true;
+                label2.Hide();
+                browseBox2.Hide();
+            }
+        }
+
+        private void browseBox1_MouseClick(object sender, MouseEventArgs e)
+        {
+            openFileDialog1.ShowDialog();
+            browseBox1.Text = openFileDialog1.FileName;
+        }
+
+        private void browseBox2_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.ShowDialog();
+            browseBox2.Text = openFileDialog1.FileName;
+        }
+
+        private void makeWatcher()
+        {
+            watcher = new FileSystemWatcher("./");
+            watcher.Filter = "move.txt";
+            watcher.NotifyFilter = NotifyFilters.LastWrite;
+            watcher.Changed += new FileSystemEventHandler(OnChanged);
+            watcher.EnableRaisingEvents = true;
+        }
+
+        private void buttonStart_Click(object sender, EventArgs e)
+        {
+            buttonStart.Enabled = false;
+            groupBox1.Enabled = false;
+            groupBox2.Enabled = false;
+            buttonReset.Enabled = true;
+            berd = new Board();
+
+            berd.getBoard(ref berd.b);
+            this.placeCheckers();
+
+            this.disableAll();
+
+            if(player1)
+            {
                 this.enableValids(0);
+            }
+            else
+            {
+                System.Diagnostics.Process.Start(browseBox1.Text);
+
+                makeWatcher();
+            }
+
+
+        }
+
+        private void buttonReset_Click(object sender, EventArgs e)
+        {
+            buttonStart.Enabled = true;
+            groupBox1.Enabled = true;
+            groupBox2.Enabled = true;
+            radioHuman1.Checked = true;
+            radioHuman2.Checked = true;
+            browseBox1.Text = "";
+            browseBox2.Text = "";
+
+            berd.b = new int[8, 8]  {{9,0,9,0,9,0,9,0},
+                                    {0,9,0,9,0,9,0,9},
+                                    {9,0,9,0,9,0,9,0},
+                                    {0,9,0,9,0,9,0,9},
+                                    {9,0,9,0,9,0,9,0},
+                                    {0,9,0,9,0,9,0,9},
+                                    {9,0,9,0,9,0,9,0},
+                                    {0,9,0,9,0,9,0,9}};
+            this.placeCheckers();
+            this.disableAll();
+        }
+
+
+
+
+
+
+
+        void OnChanged(object sender, FileSystemEventArgs e)
+        {
+            watcher.Dispose();
+            // This is firing twice and seems to be a bug in the filesystemwatcher
+            // so if we only save file the file by the minute, we shouldn't run into issues.
+
+            // read move in from file
+            MessageBox.Show("changed fired");
+            string line = File.ReadAllLines("./move.txt")[0];
+            Point source = new Point(Convert.ToInt32(line.Split(':')[0].Split(',')[0]), Convert.ToInt32(line.Split(':')[0].Split(',')[1]));
+            Point dest = new Point(Convert.ToInt32(line.Split(':')[1].Split(',')[0]), Convert.ToInt32(line.Split(':')[1].Split(',')[1]));
+            //s.r,s.c:d.r,d.c
+
+            //berd.putMove(source,dest);
+            // LOL
+            if (!jumpMode)
+            {
+                this.click(Convert.ToInt32(line.Split(':')[0].Split(',')[0]), Convert.ToInt32(line.Split(':')[0].Split(',')[1]));
+                this.click(Convert.ToInt32(line.Split(':')[1].Split(',')[0]), Convert.ToInt32(line.Split(':')[1].Split(',')[1]));
+            }
+            else
+            {
+                this.click(Convert.ToInt32(line.Split(':')[1].Split(',')[0]), Convert.ToInt32(line.Split(':')[1].Split(',')[1]));
+                jumpMode = false;
             }
         }
 

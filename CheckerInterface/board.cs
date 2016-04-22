@@ -4,17 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO;
+//using System.IO;
 
 namespace CheckerInterface
 {
-    public struct Point {
+    public struct Point
+    {
         public int r, c;
         public Point(int row, int col) {
             r = row;
             c = col;
         }
     };
+
     public struct Move
     {
         public Point s, d;
@@ -34,6 +36,7 @@ namespace CheckerInterface
         {
             this.validMoves = new List<Move> { };
             this.turn = 1;
+            
             this.b = new int[8, 8] {{ 9,-1, 9,-1, 9,-1, 9,-1},
                                     {-1, 9,-1, 9,-1, 9,-1, 9},
                                     { 9,-1, 9,-1, 9,-1, 9,-1},
@@ -42,8 +45,17 @@ namespace CheckerInterface
                                     { 1, 9, 1, 9, 1, 9, 1, 9},
                                     { 9, 1, 9, 1, 9, 1, 9, 1},
                                     { 1, 9, 1, 9, 1, 9, 1, 9}};
-
-
+            
+            /*
+            this.b = new int[8, 8] {{ 9, 0, 9, 0, 9, 0, 9, 0},
+                                    { 0, 9, 0, 9, 0, 9, 0, 9},
+                                    { 9, 0, 9, 0, 9, 0, 9, 0},
+                                    { 0, 9, 0, 9, 0, 9, 1, 9},
+                                    { 9, 0, 9, 0, 9, 0, 9, 0},
+                                    { 0, 9, 0, 9, 1, 9, 0, 9},
+                                    { 9, 0, 9,-2, 9, 0, 9, 0},
+                                    { 0, 9, 0, 9, 0, 9, 0, 9}};
+            */
         }
 
         public void getBoard(ref int[,] board)
@@ -55,6 +67,15 @@ namespace CheckerInterface
             board = this.b;
 
             // write board to textfile?
+            string[] lines = new string[8];
+            for (int r = 0; r < 8; r++)
+            {
+                for (int c = 0; c < 8; c++)
+                {
+                    lines[r] += b[r, c] + " ";
+                }
+            }
+            System.IO.File.WriteAllLines("./board.txt",lines);
         }
 
         public bool putMove(Point s, Point d)
@@ -66,17 +87,19 @@ namespace CheckerInterface
             if (this.validMoves.Contains(m))
             {
                 this.updateBoard(m);
-                //this.validMoves.clear();
+                //this.validMoves.Clear();
                 if (Math.Abs(s.r - d.r) == 2 && findJumps(m.d))
                 {
-                    //System.IO.File.Create("./again");
+                    System.IO.File.Create("./again").Close();
                     return true;
                 }
             }
             else
             {
                 // invalid move
-                // instatnt game over
+                // instant game over
+                MessageBox.Show("move "+s.r +","+ s.c + " " + d.r + "," + d.c);
+                MessageBox.Show((this.turn == 1 ? "Player 2 " : "Player 1 ") + "won because "+ (this.turn == -1 ? "Player 2 " : "Player 1 ") +"made an invalid move.");
                 return false;
             }
             return false;
@@ -95,12 +118,6 @@ namespace CheckerInterface
             }
         }
 
-        public void rotate180()
-        {
-            rotate90();
-            rotate90();
-        }
-
         void rotate90()
         {
             int[,] ret = new int[8, 8];
@@ -115,6 +132,12 @@ namespace CheckerInterface
             this.b = ret;
         }
 
+        public void rotate180()
+        {
+            rotate90();
+            rotate90();
+        }
+        
         void fillValidMoves()
         {
             Point p = new Point();
@@ -124,7 +147,7 @@ namespace CheckerInterface
             {
                 for (int c = 0; c < 8; c++)
                 {
-                    if (this.b[r, c] == 1)
+                    if (this.b[r, c] == 1 || this.b[r, c] == 2)
                     {
                         p.r = r;
                         p.c = c;
@@ -156,7 +179,7 @@ namespace CheckerInterface
             if (this.b[p.r, p.c] == 1 || this.b[p.r, p.c] == 2)
             {
                 //check front left diag for oppo and front left  double diag for empty
-                if (p.r > 1 && p.c > 1 && this.b[p.r - 1, p.c - 1] == -1 && (this.b[p.r - 2, p.c - 2] == 0))
+                if (p.r > 1 && p.c > 1 && (this.b[p.r - 1, p.c - 1] == -1 || this.b[p.r - 1, p.c - 1] == -2) && (this.b[p.r - 2, p.c - 2] == 0))
                 {
                     //add Move(piece, that double diag)
                     validMoves.Add(new Move(new Point(p.r, p.c), new Point(p.r - 2, p.c - 2)));
@@ -164,7 +187,7 @@ namespace CheckerInterface
                 }
 
                 //check front right diag for oppo and front right double diag for empty
-                if (p.r > 1 && p.c < 6 && this.b[p.r - 1, p.c + 1] == -1 && (this.b[p.r - 2, p.c + 2] == 0))
+                if (p.r > 1 && p.c < 6 && (this.b[p.r - 1, p.c + 1] == -1 || this.b[p.r - 1, p.c + 1] == -2) && (this.b[p.r - 2, p.c + 2] == 0))
                 {
                     //add Move(piece, that double diag)
                     validMoves.Add(new Move(new Point(p.r, p.c), new Point(p.r - 2, p.c + 2)));
@@ -175,7 +198,7 @@ namespace CheckerInterface
             if (this.b[p.r, p.c] == 2)
             {
                 //check back diag left  for oppo and back double diag left  for empty
-                if (p.r < 6 && p.c > 1 && this.b[p.r + 1, p.c - 1] == -1 && (this.b[p.r + 2, p.c - 2] == 0))
+                if (p.r < 6 && p.c > 1 && (this.b[p.r + 1, p.c - 1] == -1 || this.b[p.r + 1, p.c - 1] == -2) && (this.b[p.r + 2, p.c - 2] == 0))
                 {
                     //add Move(piece, that double diag)
                     validMoves.Add(new Move(new Point(p.r, p.c), new Point(p.r + 2, p.c - 2)));
@@ -183,7 +206,7 @@ namespace CheckerInterface
                 }
 
                 //check back diag right for oppo and back double diag right for empty
-                if (p.r < 6 && p.c < 6 && this.b[p.r + 1, p.c + 1] == -1 && (this.b[p.r + 2, p.c + 2] == 0))
+                if (p.r < 6 && p.c < 6 && (this.b[p.r + 1, p.c + 1] == -1 || this.b[p.r + 1, p.c + 1] == -2) && (this.b[p.r + 2, p.c + 2] == 0))
                 {
                     //add Move(piece, that double diag)
                     validMoves.Add(new Move(new Point(p.r, p.c), new Point(p.r + 2, p.c + 2)));
@@ -244,18 +267,19 @@ namespace CheckerInterface
         {
             if (Math.Abs(m.d.r - m.s.r) == 1)
             {
-                b[m.d.r, m.d.c] = 1;
+                b[m.d.r, m.d.c] = b[m.s.r, m.s.c];
                 b[m.s.r, m.s.c] = 0;
             }
             else if (Math.Abs(m.d.r - m.s.r) == 2)
             {
-                b[m.d.r, m.d.c] = 1;
+                b[m.d.r, m.d.c] = b[m.s.r, m.s.c];
                 b[m.s.r, m.s.c] = 0;
                 int kr = (m.d.r - m.s.r) / 2 + m.s.r;
                 int kc = (m.d.c - m.s.c) / 2 + m.s.c;
 
                 b[kr, kc] = 0;
             }
+
             if (m.d.r == 0)
             {
                 b[m.d.r, m.d.c] = 2;
@@ -275,21 +299,22 @@ namespace CheckerInterface
             {
                 for (int c = 0; c < 8; c++)
                 {
-                    if (b[r,c] == -1)
+                    if (this.b[r,c] == -1 || this.b[r, c] == -2)
                     {
                         red = true;
                     }
-                    else if (b[r, c] == 1)
+                    else if (this.b[r, c] == 1 || this.b[r, c] == 2)
                     {
                         black = true;
                     }
-                    if (red && black)
-                    {
-                        over = true;
-                    }
                 }
-                over = false;
             }
+
+            if (!red || !black)
+            {
+                over = true;
+            }
+
             return over;
             
         }

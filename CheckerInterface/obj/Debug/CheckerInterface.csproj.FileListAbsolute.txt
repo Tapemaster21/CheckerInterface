@@ -10,8 +10,6 @@ C:\Important\GoogleDrive\CLASS\438 ai\project\CheckerInterface\CheckerInterface\
 D:\GIT\CheckerInterface\CheckerInterface\bin\Debug\CheckerInterface.exe.config
 D:\GIT\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.exe
 D:\GIT\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.pdb
-C:\Important\GoogleDrive\CLASS\438 ai\CheckerInterface\CheckerInterface\bin\Debug\CheckerInterface.exe
-C:\Important\GoogleDrive\CLASS\438 ai\CheckerInterface\CheckerInterface\bin\Debug\CheckerInterface.pdb
 D:\Google Drive\CLASS\438 ai\CheckerInterface\CheckerInterface\bin\Debug\CheckerInterface.exe.config
 D:\Google Drive\CLASS\438 ai\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.exe
 D:\Google Drive\CLASS\438 ai\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.pdb
@@ -21,16 +19,19 @@ D:\Google Drive\CLASS\438 ai\CheckerInterface\CheckerInterface\obj\Debug\Checker
 D:\Google Drive\CLASS\438 ai\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.Interface.resources
 D:\Google Drive\CLASS\438 ai\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.Properties.Resources.resources
 D:\Google Drive\CLASS\438 ai\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.csproj.GenerateResource.Cache
-C:\Important\GoogleDrive\CLASS\438 ai\CheckerInterface\CheckerInterface\bin\Debug\CheckerInterface.exe.config
-C:\Important\GoogleDrive\CLASS\438 ai\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.Interface.resources
-C:\Important\GoogleDrive\CLASS\438 ai\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.Properties.Resources.resources
-C:\Important\GoogleDrive\CLASS\438 ai\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.csproj.GenerateResource.Cache
-C:\Important\GoogleDrive\CLASS\438 ai\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.exe
-C:\Important\GoogleDrive\CLASS\438 ai\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.pdb
-C:\Important\GoogleDrive\CLASS\438 ai\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.csprojResolveAssemblyReference.cache
 D:\GIT\CheckerInterface\CheckerInterface\bin\Debug\CheckerInterface.exe
 D:\GIT\CheckerInterface\CheckerInterface\bin\Debug\CheckerInterface.pdb
 D:\GIT\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.csprojResolveAssemblyReference.cache
 D:\GIT\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.Interface.resources
 D:\GIT\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.Properties.Resources.resources
 D:\GIT\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.csproj.GenerateResource.Cache
+C:\Important\GoogleDrive\CLASS\438 ai\CheckerInterface\CheckerInterface\bin\Debug\CheckerInterface.exe.config
+C:\Important\GoogleDrive\CLASS\438 ai\CheckerInterface\CheckerInterface\bin\Debug\CheckerInterface.exe
+C:\Important\GoogleDrive\CLASS\438 ai\CheckerInterface\CheckerInterface\bin\Debug\CheckerInterface.pdb
+C:\Important\GoogleDrive\CLASS\438 ai\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.Interface.resources
+C:\Important\GoogleDrive\CLASS\438 ai\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.Properties.Resources.resources
+C:\Important\GoogleDrive\CLASS\438 ai\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.csproj.GenerateResource.Cache
+C:\Important\GoogleDrive\CLASS\438 ai\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.exe
+C:\Important\GoogleDrive\CLASS\438 ai\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.pdb
+C:\Important\GoogleDrive\CLASS\438 ai\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.g.resources
+C:\Important\GoogleDrive\CLASS\438 ai\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.csprojResolveAssemblyReference.cache
