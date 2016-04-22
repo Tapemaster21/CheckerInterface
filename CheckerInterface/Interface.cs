@@ -215,6 +215,7 @@ namespace CheckerInterface
         
         private void click(int r, int c)
         {
+            if (watcher != null) { watcher.Dispose(); }
             if (berd.turn == 1)
             {
                 r = 7 - r;
@@ -227,6 +228,8 @@ namespace CheckerInterface
             List<Move> temp = new List<Move>(berd.validMoves);
             foreach (Move m in temp)
             {
+                //MessageBox.Show(r+","+c+": "+m.s.r+","+m.s.c+" "+m.d.r+","+m.d.c);
+
                 PictureBox spots = this.Controls.Find(("spot" + m.s.r + "" + m.s.c), true).FirstOrDefault() as PictureBox;
                 PictureBox spotd = this.Controls.Find(("spot" + m.d.r + "" + m.d.c), true).FirstOrDefault() as PictureBox;
 
@@ -242,6 +245,7 @@ namespace CheckerInterface
                     {
                         if (cur.s.r == 0 && cur.s.c == 0) // if this is first time click checker
                         {
+                            //MessageBox.Show("robo break");
                             spots.Enabled = false;
                             spots.BackColor = Color.Cyan;
                             cur.s = new Point(r, c);
@@ -255,10 +259,12 @@ namespace CheckerInterface
                             spots.Enabled = false;
                             spots.BackColor = Color.Cyan;
                             cur.s = new Point(r, c);
-
+                            
                             this.enableValids(0);
                             this.enableValids(1);
                         }
+                        //MessageBox.Show("CUR S SET");
+                        return;
                     }
                     else if (m.d.r == r && m.d.c == c) // if click in move spot
                     {
@@ -273,6 +279,7 @@ namespace CheckerInterface
                                 jumpMode = true;
                                 cur.s = cur.d;
                                 cur.d = new Point();
+                                return;
                             }
                             else
                             {
@@ -300,16 +307,24 @@ namespace CheckerInterface
                             }
                             else
                             {
-                                this.enableValids(0);
+                                if (!player1 && berd.turn == -1)
+                                {
+                                    System.Diagnostics.Process.Start(browseBox1.Text);
+                                    makeWatcher();
+                                }
+                                else if(!player2 && berd.turn == 1)
+                                {
+                                    System.Diagnostics.Process.Start(browseBox2.Text);
+                                    makeWatcher();
+                                }
+                                else
+                                {
+                                    //MessageBox.Show("my turn");
+                                    this.enableValids(0);
+                                }
                             }
                             return;
                         }
-                    }
-                    else
-                    {
-                        //  This is just a catch. There should never be a time where 
-                        //  click is called and it isn't in a green spot
-                        //  due to how we enable and disable positions.
                     }
                 }
             }
@@ -349,19 +364,22 @@ namespace CheckerInterface
 
         private void browseBox1_MouseClick(object sender, MouseEventArgs e)
         {
+            openFileDialog1.InitialDirectory = Environment.CurrentDirectory;
             openFileDialog1.ShowDialog();
             browseBox1.Text = openFileDialog1.FileName;
         }
 
         private void browseBox2_Click(object sender, EventArgs e)
         {
+            openFileDialog1.InitialDirectory = Environment.CurrentDirectory;
             openFileDialog1.ShowDialog();
             browseBox2.Text = openFileDialog1.FileName;
         }
 
         private void makeWatcher()
         {
-            watcher = new FileSystemWatcher("./");
+            //watcher.Dispose();
+            watcher = new FileSystemWatcher(Environment.CurrentDirectory);
             watcher.Filter = "move.txt";
             watcher.NotifyFilter = NotifyFilters.LastWrite;
             watcher.Changed += new FileSystemEventHandler(OnChanged);
@@ -404,6 +422,7 @@ namespace CheckerInterface
             radioHuman2.Checked = true;
             browseBox1.Text = "";
             browseBox2.Text = "";
+            //watcher.Dispose();
 
             berd.b = new int[8, 8]  {{9,0,9,0,9,0,9,0},
                                     {0,9,0,9,0,9,0,9},
@@ -430,8 +449,9 @@ namespace CheckerInterface
             // so if we only save file the file by the minute, we shouldn't run into issues.
 
             // read move in from file
-            MessageBox.Show("changed fired");
+            //MessageBox.Show("changed fired");
             string line = File.ReadAllLines("./move.txt")[0];
+
             Point source = new Point(Convert.ToInt32(line.Split(':')[0].Split(',')[0]), Convert.ToInt32(line.Split(':')[0].Split(',')[1]));
             Point dest = new Point(Convert.ToInt32(line.Split(':')[1].Split(',')[0]), Convert.ToInt32(line.Split(':')[1].Split(',')[1]));
             //s.r,s.c:d.r,d.c
@@ -440,12 +460,13 @@ namespace CheckerInterface
             // LOL
             if (!jumpMode)
             {
-                this.click(Convert.ToInt32(line.Split(':')[0].Split(',')[0]), Convert.ToInt32(line.Split(':')[0].Split(',')[1]));
-                this.click(Convert.ToInt32(line.Split(':')[1].Split(',')[0]), Convert.ToInt32(line.Split(':')[1].Split(',')[1]));
+                this.click(source.r, source.c);
+                MessageBox.Show(source.r +","+source.c+" "+dest.r+","+dest.c);
+                this.click(dest.r, dest.c);
             }
             else
             {
-                this.click(Convert.ToInt32(line.Split(':')[1].Split(',')[0]), Convert.ToInt32(line.Split(':')[1].Split(',')[1]));
+                this.click(dest.r, dest.c);
                 jumpMode = false;
             }
         }

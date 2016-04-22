@@ -22,7 +22,7 @@ void main() {
 	int x = rand() % (validMoves.size());
 
 	putMoveMove(validMoves[x]);
-
+	//system("pause");
 }
 
 void fillValidMoves() {
