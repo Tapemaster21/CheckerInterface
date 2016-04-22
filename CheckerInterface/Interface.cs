@@ -16,8 +16,8 @@ namespace CheckerInterface
     {
         Board berd;
         Move cur;
-        char turn;
         Bitmap red, black;
+        int player1, player2;
 
 
         public Interface()
@@ -29,60 +29,28 @@ namespace CheckerInterface
             black = new Bitmap(CheckerInterface.Properties.Resources.Black);
 
         }
-
-        ///////////////////////////////////////////////
         
-        /*
-        void humanTurn()
+        void go()
         {
             berd.getBoard(ref berd.b);
-            
+            this.placeCheckers();
+
+            this.disableAll();
             this.enableValids(0);
-
-            //while(!globalClick1){}
-            
-            this.enableValids(1); //does it on cur.s
-
-            Point temp = click2(); //wait for click event
-
-
-            if (berd.b[temp.r, temp.c] == 1)
-            {
-                cur.s = temp;
-                disableAll();
-                enableValids(0);
-                enableValids(1);
-                updateVisualBoard()
-            }
-	        else
-	        {
-
-                cur.d = click2; //wait for click event
-		        while( berd.putMove(cur.s, cur.d) )
-		        {
-			        cur.s = cur.d;
-			        //cur.d = new Point();
-			        disableAll();
-			        enableValids(1);
-			        cur.d = click2; //wait for click event
-                    updateVisualBoard()
-		        }
-	        }
-            
         }
-        */
-        ///////////////////////////////////////////////
 
         void enableValids(int val)
         {
-            MessageBox.Show("ValidMoves "+berd.validMoves.Count());
             for (int r = 0; r < 8; r++)
             {
                 for (int c = 0; c < 8; c++)
                 {
-                    //if 0 does on cur.s
-                    //if 1 does on cur.d
                     PictureBox spot = this.Controls.Find(("spot" + r + "" + c), true).FirstOrDefault() as PictureBox;
+                    if(berd.turn == 1)
+                    {
+                        spot = this.Controls.Find(("spot" + (7-r) + "" + (7-c)), true).FirstOrDefault() as PictureBox;
+                    }
+
                     if (spot != null)
                     {
                         switch(val)
@@ -94,8 +62,24 @@ namespace CheckerInterface
                                     {
                                         foreach (Move m in berd.validMoves)
                                         {
-                                            //MessageBox.Show(r + ", " + c);
-                                            if (m.s.r == r && m.s.c == c)
+                                            if (m.s.r == r && m.s.c == c && spot.BackColor != Color.Cyan)
+                                            {
+                                                spot.Enabled = true;
+                                                spot.BackColor = Color.Green;
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
+                            case 1:
+                                // this enables the spaces that are the valid moves for the checker in cur.s
+                                if (berd.b[r, c] == 0)
+                                {
+                                    if (berd.validMoves != null)
+                                    {
+                                        foreach (Move m in berd.validMoves)
+                                        {
+                                            if (m.s.r == cur.s.r && m.s.c == cur.s.c && m.d.r == r && m.d.c == c)
                                             {
                                                 spot.Enabled = true;
                                                 spot.BackColor = Color.LimeGreen;
@@ -104,21 +88,12 @@ namespace CheckerInterface
                                     }
                                 }
                                 break;
-                            case 1:
-                                if (berd.b[r, c] == 0)
+                            case 2:
+                                // this is basically a disableValids( previous move )
+                                foreach (Move m in berd.validMoves)
                                 {
-                                    if (berd.validMoves != null)
-                                    {
-                                        foreach (Move m in berd.validMoves)
-                                        {
-                                            //MessageBox.Show(r + ", " + c);
-                                            if (m.s.r == cur.s.r && m.s.c == cur.s.c && m.d.r == r && m.d.c == c)
-                                            {
-                                                spot.Enabled = true;
-                                                spot.BackColor = Color.LimeGreen;
-                                            }
-                                        }
-                                    }
+                                        spot.Enabled = false;
+                                        spot.BackColor = Color.Tan;
                                 }
                                 break;
                             default:
@@ -175,6 +150,7 @@ namespace CheckerInterface
 
         void placeCheckers()
         {
+            if (berd.turn == 1) { berd.rotate180(); }
             for (int r = 0; r < 8; r++)
             {
                 for (int c = 0; c < 8; c++)
@@ -182,32 +158,56 @@ namespace CheckerInterface
                     PictureBox spot = this.Controls.Find(("spot" + r + "" + c), true).FirstOrDefault() as PictureBox;
                     if (spot != null)
                     {
-                        if (berd.b[r, c] == -1)
+                        if(berd.turn == 1)
                         {
-                            spot.BackgroundImage = red;
-                        }
-                        else if (berd.b[r, c] == 1)
-                        {
-                            spot.BackgroundImage = black;
+                            if (berd.b[r, c] == -1)
+                            {
+                                spot.BackgroundImage = red;
+                            }
+                            else if (berd.b[r, c] == 1)
+                            {
+                                spot.BackgroundImage = black;
+                            }
+                            else
+                            {
+                                spot.BackgroundImage = null;
+                            }
                         }
                         else
                         {
-                            spot.BackgroundImage = null;
+                            if (berd.b[r, c] == 1)
+                            {
+                                spot.BackgroundImage = red;
+                            }
+                            else if (berd.b[r, c] == -1)
+                            {
+                                spot.BackgroundImage = black;
+                            }
+                            else
+                            {
+                                spot.BackgroundImage = null;
+                            }
                         }
+
+                        spot.BackColor = Color.Tan;
                     }
+
                 }
             }
+            if (berd.turn == 1){ berd.rotate180(); }
         }
 
         private void radioHuman1_CheckedChanged(object sender, EventArgs e)
         {
             if (radioComputer1.Checked)
             {
+                player1 = 1;
                 label1.Show();
                 browseBox1.Show();
             }
             else
             {
+                player1 = 0;
                 label1.Hide();
                 browseBox1.Hide();
             }
@@ -217,11 +217,13 @@ namespace CheckerInterface
         {
             if (radioComputer2.Checked)
             {
+                player2 = 1;
                 label2.Show();
                 browseBox2.Show();
             }
             else
             {
+                player2 = 0;
                 label2.Hide();
                 browseBox2.Hide();
             }
@@ -242,40 +244,111 @@ namespace CheckerInterface
         private void buttonStart_Click(object sender, EventArgs e)
         {
             berd = new Board();
-            berd.getBoard(ref berd.b);
-            this.placeCheckers();
-
-            this.disableAll();
-            this.enableValids(0);
+            
+            this.go();
         }
 
         private void buttonReset_Click(object sender, EventArgs e)
         {
-
+            berd.b = new int[8, 8]  {{9,0,9,0,9,0,9,0},
+                                    {0,9,0,9,0,9,0,9},
+                                    {9,0,9,0,9,0,9,0},
+                                    {0,9,0,9,0,9,0,9},
+                                    {9,0,9,0,9,0,9,0},
+                                    {0,9,0,9,0,9,0,9},
+                                    {9,0,9,0,9,0,9,0},
+                                    {0,9,0,9,0,9,0,9}};
+            this.placeCheckers();
+            this.disableAll();
         }
 
         private void click(int r, int c)
         {
-            //MessageBox.Show("spot " + r + ", " + c);
-            foreach (Move m in berd.validMoves)
+            if (berd.turn == 1)
+            {
+                r = 7 - r;
+                c = 7 - c;
+            }
+            if (berd.validMoves == null)
+            { MessageBox.Show("you done did it now"); }
+
+            bool moved = false;
+
+            List<Move> temp = new List<Move>(berd.validMoves);
+            foreach (Move m in temp)
             {
                 PictureBox spots = this.Controls.Find(("spot" + m.s.r + "" + m.s.c), true).FirstOrDefault() as PictureBox;
                 PictureBox spotd = this.Controls.Find(("spot" + m.d.r + "" + m.d.c), true).FirstOrDefault() as PictureBox;
+
+                if (berd.turn == 1)
+                {
+                    spots = this.Controls.Find(("spot" + (7-m.s.r) + "" + (7-m.s.c)), true).FirstOrDefault() as PictureBox;
+                    spotd = this.Controls.Find(("spot" + (7-m.d.r) + "" + (7-m.d.c)), true).FirstOrDefault() as PictureBox;
+                }
+
                 if (spots != null && spotd != null)
                 {
-                    if (m.s.r == r && m.s.c == c)
+                    if (m.s.r == r && m.s.c == c) // if click on checker
                     {
-                        spots.Enabled = false;
-                        spots.BackColor = Color.Cyan;
-                        cur.s = new Point(r,c);
+                        if (cur.s.r == 0 && cur.s.c == 0) // if this is first time click checker
+                        {
+                            spots.Enabled = false;
+                            spots.BackColor = Color.Cyan;
+                            cur.s = new Point(r, c);
+
+                            this.enableValids(1);
+                        }
+                        else // you're changing checker that you want to move, cur.s
+                        {
+                            this.enableValids(2);
+
+                            spots.Enabled = false;
+                            spots.BackColor = Color.Cyan;
+                            cur.s = new Point(r, c);
+
+                            this.enableValids(0);
+                            this.enableValids(1);
+                        }
+                    }
+                    else if (m.d.r == r && m.d.c == c) // if click in move spot
+                    {
+                        
+                        cur.d = new Point(r, c);
+                        if(berd.putMove(cur.s, cur.d)) // if you have a second jump
+                        {
+                            this.enableValids(2);
+
+                            this.placeCheckers();
+                            spotd.BackColor = Color.Cyan;
+                            cur.s = cur.d;
+                            cur.d = new Point();
+
+                            this.enableValids(1);
+                        }
+                        else // you're done
+                        {
+                            this.enableValids(2);
+                            moved = true;
+                            cur = new Move();
+                        }
+                        //this.go();
                     }
                     else
                     {
-                        spots.BackColor = Color.Tan;
+                        //  This is just a catch. There should never be a time where 
+                        //  click is called and it isn't in a green spot
+                        //  due to how we enable and disable positions.
+                        
                     }
                 }
             }
-            this.enableValids(1);
+
+            if(moved)
+            {
+                berd.getBoard(ref berd.b);
+                this.placeCheckers();
+                this.enableValids(0);
+            }
         }
 
         private void spot01_Click(object sender, EventArgs e)

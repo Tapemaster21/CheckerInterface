@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace CheckerInterface
 {
@@ -28,20 +29,20 @@ namespace CheckerInterface
         public int turn;
         public int[,] b;
         public List<Move> validMoves;
-        
+
         public Board()
         {
-            validMoves = new List<Move> { };
-            turn = 1;
-            b = new int[8, 8]  {{9,-1,9,-1,9,-1,9,-1},
-                                {-1,9,-1,9,-1,9,-1,9},
-                                {9,-1,9,-1,9,-1,9,-1},
-                                {0,9,0,9,0,9,0,9},
-                                {9,0,9,0,9,0,9,0},
-                                {1,9,1,9,1,9,1,9},
-                                {9,1,9,1,9,1,9,1},
-                                {1,9,0,9,1,9,1,9}};
-            
+            this.validMoves = new List<Move> { };
+            this.turn = 1;
+            this.b = new int[8, 8] {{ 9,-1, 9,-1, 9,-1, 9,-1},
+                                    {-1, 9,-1, 9,-1, 9,-1, 9},
+                                    { 9,-1, 9,-1, 9,-1, 9,-1},
+                                    { 0, 9, 0, 9, 0, 9, 0, 9},
+                                    { 9, 0, 9, 0, 9, 0, 9, 0},
+                                    { 1, 9, 1, 9, 1, 9, 1, 9},
+                                    { 9, 1, 9, 1, 9, 1, 9, 1},
+                                    { 1, 9, 1, 9, 1, 9, 1, 9}};
+
 
         }
 
@@ -50,35 +51,41 @@ namespace CheckerInterface
             this.flipBoard();
             this.validMoves.Clear();
             this.fillValidMoves();
-
+            this.turn = -this.turn;
             board = this.b;
-            //Array.Copy(this.b, board, 8);
 
             // write board to textfile?
         }
 
         public bool putMove(Point s, Point d)
         {
+
             // We need to read in from text file
+
             Move m = new Move(s, d);
             if (this.validMoves.Contains(m))
             {
                 this.updateBoard(m);
-                this.validMoves.Clear();
-                return findJumps(m.d);
+                //this.validMoves.clear();
+                if (Math.Abs(s.r - d.r) == 2 && findJumps(m.d))
+                {
+                    //System.IO.File.Create("./again");
+                    return true;
+                }
             }
             else
             {
                 // invalid move
                 // instatnt game over
-                return false; 
+                return false;
             }
+            return false;
         }
 
         void flipBoard()
         {
-            rotate90();
-            rotate90();
+            rotate180();
+
             for (int r = 0; r < 8; r++)
             {
                 for (int c = 0; c < 8; c++)
@@ -86,6 +93,12 @@ namespace CheckerInterface
                     b[r, c] = -(b[r, c]);
                 }
             }
+        }
+
+        public void rotate180()
+        {
+            rotate90();
+            rotate90();
         }
 
         void rotate90()
@@ -100,7 +113,6 @@ namespace CheckerInterface
                 }
             }
             this.b = ret;
-            //ret.CopyTo(b,0);
         }
 
         void fillValidMoves()
@@ -112,7 +124,7 @@ namespace CheckerInterface
             {
                 for (int c = 0; c < 8; c++)
                 {
-                    if (b[r, c] == 1)
+                    if (this.b[r, c] == 1)
                     {
                         p.r = r;
                         p.c = c;
@@ -122,7 +134,7 @@ namespace CheckerInterface
                         }
                         else
                         {
-                            if (findJumps(p))
+                            if (this.findJumps(p))
                             {
                                 forced = true;
                                 this.validMoves.Clear();
@@ -141,44 +153,41 @@ namespace CheckerInterface
         bool findJumps(Point p)
         {
             bool found = false;
-            if (p.r > 2 && p.r < 6 && p.c > 2 && p.c > 6)
+            if (this.b[p.r, p.c] == 1 || this.b[p.r, p.c] == 2)
             {
-                if (this.b[p.r, p.c] == 2)
+                //check front left diag for oppo and front left  double diag for empty
+                if (p.r > 1 && p.c > 1 && this.b[p.r - 1, p.c - 1] == -1 && (this.b[p.r - 2, p.c - 2] == 0))
                 {
-                    //check back diag left  for oppo and back double diag left  for empty
-                    if (this.b[p.r + 1, p.c - 1] == -1 && (this.b[p.r + 2, p.c - 2] == 0))
-                    {
-                        //add Move(piece, that double diag)
-                        validMoves.Add(new Move(new Point(p.r, p.c), new Point(p.r + 2, p.c - 2)));
-                        found = true;
-                    }
-
-                    //check back diag right for oppo and back double diag right for empty
-                    if (this.b[p.r + 1, p.c + 1] == -1 && (this.b[p.r + 2, p.c + 2] == 0))
-                    {
-                        //add Move(piece, that double diag)
-                        validMoves.Add(new Move(new Point(p.r, p.c), new Point(p.r + 2, p.c + 2)));
-                        found = true;
-                    }
+                    //add Move(piece, that double diag)
+                    validMoves.Add(new Move(new Point(p.r, p.c), new Point(p.r - 2, p.c - 2)));
+                    found = true;
                 }
 
-                if (this.b[p.r, p.c] == 2 || this.b[p.r, p.c] == 1)
+                //check front right diag for oppo and front right double diag for empty
+                if (p.r > 1 && p.c < 6 && this.b[p.r - 1, p.c + 1] == -1 && (this.b[p.r - 2, p.c + 2] == 0))
                 {
-                    //check front left diag for oppo and front left  double diag for empty
-                    if (this.b[p.r - 1, p.c - 1] == -1 && (this.b[p.r - 2, p.c - 2] == 0))
-                    {
-                        //add Move(piece, that double diag)
-                        validMoves.Add(new Move(new Point(p.r, p.c), new Point(p.r - 2, p.c - 2)));
-                        found = true;
-                    }
+                    //add Move(piece, that double diag)
+                    validMoves.Add(new Move(new Point(p.r, p.c), new Point(p.r - 2, p.c + 2)));
+                    found = true;
+                }
+            }
+            
+            if (this.b[p.r, p.c] == 2)
+            {
+                //check back diag left  for oppo and back double diag left  for empty
+                if (p.r < 6 && p.c > 1 && this.b[p.r + 1, p.c - 1] == -1 && (this.b[p.r + 2, p.c - 2] == 0))
+                {
+                    //add Move(piece, that double diag)
+                    validMoves.Add(new Move(new Point(p.r, p.c), new Point(p.r + 2, p.c - 2)));
+                    found = true;
+                }
 
-                    //check front right diag for oppo and front right double diag for empty
-                    if (this.b[p.r - 1, p.c + 1] == -1 && (this.b[p.r - 2, p.c + 2] == 0))
-                    {
-                        //add Move(piece, that double diag)
-                        validMoves.Add(new Move(new Point(p.r, p.c), new Point(p.r - 2, p.c + 2)));
-                        found = true;
-                    }
+                //check back diag right for oppo and back double diag right for empty
+                if (p.r < 6 && p.c < 6 && this.b[p.r + 1, p.c + 1] == -1 && (this.b[p.r + 2, p.c + 2] == 0))
+                {
+                    //add Move(piece, that double diag)
+                    validMoves.Add(new Move(new Point(p.r, p.c), new Point(p.r + 2, p.c + 2)));
+                    found = true;
                 }
             }
             return found;
@@ -188,49 +197,46 @@ namespace CheckerInterface
         {
 
             bool found = false;
-            // this checks if its in board bounds
-            if (p.r >= 0 && p.r <= 7 && p.c >= 0 && p.c <= 7)
+
+            if (this.b[p.r, p.c] == 1 || this.b[p.r, p.c] == 2)
             {
-                if (this.b[p.r, p.c] == 1 || this.b[p.r, p.c] == 2)
+                //check front left diag for empty
+                if (p.r > 0 && p.c > 0 && this.b[p.r - 1, p.c - 1] == 0)
                 {
-                    //check front left diag for empty
-                    if (p.r > 0 && p.c > 0 && this.b[p.r - 1, p.c - 1] == 0)
-                    {
-                        //add Move(piece, that double diag)
-                        this.validMoves.Add(new Move(new Point(p.r, p.c), new Point(p.r - 1, p.c - 1)));
-                        found = true;
-                    }
-
-                    //check front right diag for empty
-                    if (p.r > 0 && p.c < 7 && this.b[p.r - 1, p.c + 1] == 0)
-                    {
-                        //add Move(piece, that double diag)
-                        this.validMoves.Add(new Move(new Point(p.r, p.c), new Point(p.r - 1, p.c + 1)));
-                        found = true;
-                    }
-
+                    //add Move(piece, that double diag)
+                    this.validMoves.Add(new Move(new Point(p.r, p.c), new Point(p.r - 1, p.c - 1)));
+                    found = true;
                 }
 
-                if (this.b[p.r, p.c] == 2)
+                //check front right diag for empty
+                if (p.r > 0 && p.c < 7 && this.b[p.r - 1, p.c + 1] == 0)
                 {
-                    //check back diag left for empty
-                    if (p.r < 7 && p.c > 0 && this.b[p.r + 1, p.c - 1] == 0)
-                    {
-                        //add Move(piece, that double diag)
-                        this.validMoves.Add(new Move(new Point(p.r, p.c), new Point(p.r + 1, p.c - 1)));
-                        found = true;
-                    }
-
-                    //check back diag right for empty
-                    if (p.r < 7 && p.c < 7 && this.b[p.r + 1, p.c + 1] == 0)
-                    {
-                        //add Move(piece, that double diag)
-                        this.validMoves.Add(new Move(new Point(p.r, p.c), new Point(p.r + 1, p.c + 1)));
-                        found = true;
-                    }
+                    //add Move(piece, that double diag)
+                    this.validMoves.Add(new Move(new Point(p.r, p.c), new Point(p.r - 1, p.c + 1)));
+                    found = true;
                 }
 
             }
+
+            if (this.b[p.r, p.c] == 2)
+            {
+                //check back diag left for empty
+                if (p.r < 7 && p.c > 0 && this.b[p.r + 1, p.c - 1] == 0)
+                {
+                    //add Move(piece, that double diag)
+                    this.validMoves.Add(new Move(new Point(p.r, p.c), new Point(p.r + 1, p.c - 1)));
+                    found = true;
+                }
+
+                //check back diag right for empty
+                if (p.r < 7 && p.c < 7 && this.b[p.r + 1, p.c + 1] == 0)
+                {
+                    //add Move(piece, that double diag)
+                    this.validMoves.Add(new Move(new Point(p.r, p.c), new Point(p.r + 1, p.c + 1)));
+                    found = true;
+                }
+            }
+                
             return found;
         }
 
@@ -259,7 +265,7 @@ namespace CheckerInterface
             // Write board to a board.txt file
         }
 
-        bool over()
+        public bool over()
         {
             //check if pieces from both players exist
             bool red = false;
