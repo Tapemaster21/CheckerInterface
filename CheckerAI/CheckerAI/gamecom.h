@@ -34,14 +34,13 @@ namespace Checkers
 		fin.open("board.txt");
 		
 		if (fin.is_open()) {
-			cout << "opened file "<< endl;
+			//cout << "opened file "<< endl;
 			for (int r = 0; r <= 7; r++)
 			{
 				for (int c = 0; c <= 7; c++)
 				{
 					fin >> board[r][c];
-					//board[r][c] = (int)in.get();
-					cout << board[r][c];
+					//cout << board[r][c];
 				}
 
 			}

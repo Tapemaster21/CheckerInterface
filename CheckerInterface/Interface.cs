@@ -460,8 +460,9 @@ namespace CheckerInterface
             // LOL
             if (!jumpMode)
             {
+                //MessageBox.Show(source.r +","+source.c+" "+dest.r+","+dest.c);
+
                 this.click(source.r, source.c);
-                MessageBox.Show(source.r +","+source.c+" "+dest.r+","+dest.c);
                 this.click(dest.r, dest.c);
             }
             else

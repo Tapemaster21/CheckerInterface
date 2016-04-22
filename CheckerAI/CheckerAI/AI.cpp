@@ -1,13 +1,15 @@
 #include "gamecom.h"
 #include <vector>
 #include <cmath>
+#include <time.h>
 
 
 using namespace Checkers;
 void fillValidMoves();
 bool findJumps(Point p);
 bool findMoves(Point p);
-
+void printBoard();
+void printValidMoves();
 
 static int board[8][8] = { };
 vector<Move> validMoves;
@@ -16,13 +18,66 @@ vector<Move> validMoves;
 void main() {
 
 	getGameBoard(board);
+	printBoard();
 
 	fillValidMoves();
+	printValidMoves();
 
+	srand(time(NULL));
 	int x = rand() % (validMoves.size());
+
+	cout << "Selected " << x+1 << "\n\t" << validMoves[x].s.r << "," << validMoves[x].s.c << " " << validMoves[x].d.r << "," << validMoves[x].d.c << endl;
 
 	putMoveMove(validMoves[x]);
 	//system("pause");
+}
+
+void printBoard()
+{
+	for (int r = 0; r < 8; r++)
+	{
+		for (int c = 0; c < 8; c++)
+		{
+			int thing = board[r][c];
+			if (thing == 9 || thing == -9)
+			{
+				cout << (char)219;
+			}
+			else if (thing == 0)
+			{
+				cout << ' ';
+			}
+			else if (thing == 1)
+			{
+				cout << 'o';
+			}
+			else if (thing == 2)
+			{
+				cout << 'O';
+			}
+			else if (thing == -1)
+			{
+				cout << 'x';
+			}
+			else if (thing == -2)
+			{
+				cout << 'X';
+			}
+		}
+		cout << endl;
+	}
+	cout << endl;
+	return;
+}
+
+void printValidMoves()
+{
+	cout << validMoves.size() << " Moves: " << endl;
+	for each (Move m in validMoves)
+	{
+		cout << "\t" << m.s.r << "," << m.s.c << " " << m.d.r << "," << m.d.c << endl;
+	}
+	cout << endl;
 }
 
 void fillValidMoves() {
@@ -46,7 +101,7 @@ void fillValidMoves() {
 					if (findJumps(p))
 					{
 						forced = true;
-						validMoves.empty();
+						validMoves.clear();
 						findJumps(p);
 					}
 					else
@@ -60,6 +115,7 @@ void fillValidMoves() {
 
 
 }
+
 bool findJumps(Point p)
 {
 	bool found = false;
