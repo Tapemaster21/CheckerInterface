@@ -35,3 +35,4 @@ C:\Important\GoogleDrive\CLASS\438 ai\CheckerInterface\CheckerInterface\obj\Debu
 C:\Important\GoogleDrive\CLASS\438 ai\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.pdb
 C:\Important\GoogleDrive\CLASS\438 ai\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.g.resources
 C:\Important\GoogleDrive\CLASS\438 ai\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.csprojResolveAssemblyReference.cache
+D:\GIT\CheckerInterface\CheckerInterface\obj\Debug\CheckerInterface.g.resources

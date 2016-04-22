@@ -9,7 +9,7 @@ bool findJumps(Point p);
 bool findMoves(Point p);
 
 
-int board[8][8] = {};
+static int board[8][8] = { };
 vector<Move> validMoves;
 
 
@@ -19,7 +19,7 @@ void main() {
 
 	fillValidMoves();
 
-	int x = rand() % (validMoves.size()/sizeof(Move));
+	int x = rand() % (validMoves.size());
 
 	putMoveMove(validMoves[x]);
 
@@ -60,23 +60,23 @@ void fillValidMoves() {
 
 
 }
-bool findJumps(Point p) {
-
+bool findJumps(Point p)
+{
 	bool found = false;
 	if (board[p.r][p.c] == 1 || board[p.r][p.c] == 2)
 	{
 		//check front left diag for oppo and front left  double diag for empty
-		if (p.r > 1 && p.c > 1 && board[p.r - 1][p.c - 1] == -1 && (board[p.r - 2][p.c - 2] == 0))
+		if (p.r > 1 && p.c > 1 && (board[p.r - 1][p.c - 1] == -1 || board[p.r - 1][p.c - 1] == -2) && (board[p.r - 2][p.c - 2] == 0))
 		{
-			//add Move(piece, that double diag)
-			validMoves.push_back(Move(Point(p.r, p.c),Point(p.r - 2, p.c - 2)));
+			//add Move(piece][that double diag)
+			validMoves.push_back(Move(Point(p.r, p.c), Point(p.r - 2, p.c - 2)));
 			found = true;
 		}
 
 		//check front right diag for oppo and front right double diag for empty
-		if (p.r > 1 && p.c < 6 && board[p.r - 1][p.c + 1] == -1 && (board[p.r - 2][p.c + 2] == 0))
+		if (p.r > 1 && p.c < 6 && (board[p.r - 1][p.c + 1] == -1 || board[p.r - 1][p.c + 1] == -2) && (board[p.r - 2][p.c + 2] == 0))
 		{
-			//add Move(piece, that double diag)
+			//add Move(piece][that double diag)
 			validMoves.push_back(Move(Point(p.r, p.c), Point(p.r - 2, p.c + 2)));
 			found = true;
 		}
@@ -85,17 +85,17 @@ bool findJumps(Point p) {
 	if (board[p.r][p.c] == 2)
 	{
 		//check back diag left  for oppo and back double diag left  for empty
-		if (p.r < 6 && p.c > 1 && board[p.r + 1][p.c - 1] == -1 && (board[p.r + 2][p.c - 2] == 0))
+		if (p.r < 6 && p.c > 1 && (board[p.r + 1][p.c - 1] == -1 || board[p.r + 1][p.c - 1] == -2) && (board[p.r + 2][p.c - 2] == 0))
 		{
-			//add Move(piece, that double diag)
+			//add Move(piece][that double diag)
 			validMoves.push_back(Move(Point(p.r, p.c), Point(p.r + 2, p.c - 2)));
 			found = true;
 		}
 
 		//check back diag right for oppo and back double diag right for empty
-		if (p.r < 6 && p.c < 6 && board[p.r + 1][p.c + 1] == -1 && (board[p.r + 2][p.c + 2] == 0))
+		if (p.r < 6 && p.c < 6 && (board[p.r + 1][p.c + 1] == -1 || board[p.r + 1][p.c + 1] == -2) && (board[p.r + 2][p.c + 2] == 0))
 		{
-			//add Move(piece, that double diag)
+			//add Move(piece][that double diag)
 			validMoves.push_back(Move(Point(p.r, p.c), Point(p.r + 2, p.c + 2)));
 			found = true;
 		}
@@ -103,24 +103,26 @@ bool findJumps(Point p) {
 	return found;
 }
 
-bool findMoves(Point p) {
+bool findMoves(Point p)
+{
+
 	bool found = false;
 
 	if (board[p.r][p.c] == 1 || board[p.r][p.c] == 2)
 	{
 		//check front left diag for empty
-		if (p.r > 0 && p.c > 0 && board[p.r - 1, p.c - 1] == 0)
+		if (p.r > 0 && p.c > 0 && board[p.r - 1][p.c - 1] == 0)
 		{
-			//add Move(piece, that double diag)
-			validMoves.push_back((Move(Point(p.r, p.c), Point(p.r - 1, p.c - 1))));
+			//add Move(piece][that double diag)
+			validMoves.push_back(Move(Point(p.r, p.c), Point(p.r - 1, p.c - 1)));
 			found = true;
 		}
 
 		//check front right diag for empty
-		if (p.r > 0 && p.c < 7 && board[p.r - 1, p.c + 1] == 0)
+		if (p.r > 0 && p.c < 7 && board[p.r - 1][p.c + 1] == 0)
 		{
-			//add Move(piece, that double diag)
-			validMoves.push_back(Move(Point(p.r, p.c),Point(p.r - 1, p.c + 1)));
+			//add Move(piece][that double diag)
+			validMoves.push_back(Move(Point(p.r, p.c), Point(p.r - 1, p.c + 1)));
 			found = true;
 		}
 
@@ -129,18 +131,18 @@ bool findMoves(Point p) {
 	if (board[p.r][p.c] == 2)
 	{
 		//check back diag left for empty
-		if (p.r < 7 && p.c > 0 && board[p.r + 1, p.c - 1] == 0)
+		if (p.r < 7 && p.c > 0 && board[p.r + 1][p.c - 1] == 0)
 		{
-			//add Move(piece, that double diag)
-			validMoves.push_back(Move(Point(p.r, p.c), Point(p.r + 1, p.c - 1)));
+			//add Move(piece][that double diag)
+			validMoves.push_back(Move( Point(p.r, p.c), Point(p.r + 1, p.c - 1)));
 			found = true;
 		}
 
 		//check back diag right for empty
-		if (p.r < 7 && p.c < 7 && board[p.r + 1, p.c + 1] == 0)
+		if (p.r < 7 && p.c < 7 && board[p.r + 1][p.c + 1] == 0)
 		{
-			//add Move(piece, that double diag)
-			validMoves.push_back(Move(Point(p.r, p.c), Point(p.r + 1, p.c + 1)));
+			//add Move(piece][that double diag)
+			validMoves.push_back(Move( Point(p.r, p.c), Point(p.r + 1, p.c + 1)));
 			found = true;
 		}
 	}

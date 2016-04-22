@@ -1,10 +1,7 @@
-#pragma once
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <stdlib.h>
-#include <Windows.h>
-
 
 
 using namespace std;
@@ -30,38 +27,47 @@ namespace Checkers
 		}
 	};
 
-		bool getGameBoard(int board[8][8])
-		{
-			int x, i;
-			ifstream in("board.txt");
-
-			if (in) {
-				for (int r = 0; r <= 7; r++)
+	bool getGameBoard(int board[8][8])
+	{
+		int x, i;
+		ifstream fin;
+		fin.open("board.txt");
+		
+		if (fin.is_open()) {
+			cout << "opened file "<< endl;
+			for (int r = 0; r <= 7; r++)
+			{
+				for (int c = 0; c <= 7; c++)
 				{
-					for (int c = 0; c <= 7; c++)
-					{
-						in >> board[r][c];
-					}
-
+					fin >> board[r][c];
+					//board[r][c] = (int)in.get();
+					cout << board[r][c];
 				}
-				return true;
-			}
 
+			}
+			fin.close();
+			return true;
+			
 		}
+	}
+			
+
+		
 
 		bool putMove(int sourceRow, int sourceCol, int destRow, int destCol)
 		{
 			ofstream out("move.txt");
 
-			if (sourceCol >= 7 || sourceCol<0)
+			if (sourceCol > 7 || sourceCol < 0)
 				return false;
-			if (sourceRow >= 7 || sourceRow<0)
+			if (sourceRow > 7 || sourceRow < 0)
 				return false;
-			if (destCol >= 7 || destCol<0)
+			if (destCol > 7 || destCol < 0)
 				return false;
-			if (destRow >= 7 || destRow<0)
+			if (destRow > 7 || destRow < 0)
 				return false;
 			out << sourceRow << "," << sourceCol << ":" << destRow << "," << destCol << endl;
+			out.flush();
 			out.close();
 
 			ifstream in("again");
