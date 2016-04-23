@@ -28,8 +28,19 @@ void main() {
 
 	cout << "Selected " << x+1 << "\n\t" << validMoves[x].s.r << "," << validMoves[x].s.c << " " << validMoves[x].d.r << "," << validMoves[x].d.c << endl;
 
-	putMoveMove(validMoves[x]);
-	//system("pause");
+	vector<Point> points = { validMoves[x].s,validMoves[x].d };
+	Point dest = validMoves[x].d;
+	if (findJumps(dest)) {
+		validMoves.clear();
+		points.push_back(validMoves[0].d);
+	}
+	Point *ps = new Point[points.size()];
+	for (int i = 0; i < points.size(); i++) {
+		ps[i] = points[i];
+	}
+
+	putMove(ps,points.size());
+	system("pause");
 }
 
 void printBoard()

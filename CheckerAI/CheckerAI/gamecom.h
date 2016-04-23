@@ -49,44 +49,24 @@ namespace Checkers
 			
 		}
 	}
+
+	bool putMove(Point points[],int length)
+	{
+		ofstream out("move.txt");
+
+		for (int i = 0; i <= length;i++) {
 			
-
-		
-
-		bool putMove(int sourceRow, int sourceCol, int destRow, int destCol)
-		{
-			ofstream out("move.txt");
-
-			if (sourceCol > 7 || sourceCol < 0)
+			if (points[i].c > 7 || points[i].r < 0)
 				return false;
-			if (sourceRow > 7 || sourceRow < 0)
+			if (points[i].r > 7 || points[i].c < 0)
 				return false;
-			if (destCol > 7 || destCol < 0)
-				return false;
-			if (destRow > 7 || destRow < 0)
-				return false;
-			out << sourceRow << "," << sourceCol << ":" << destRow << "," << destCol << endl;
-			out.flush();
-			out.close();
-
-			ifstream in("again");
-			for (int i = 0; i < 10000; i++)
-			{
-				if (in)
-				{
-					in.close();
-					remove("again");
-					return true;
-				}
+			out << points[i].r << "," << points[i].c;
+			if (i < length-1) {
+				out << ":";
 			}
-			return false;
+
 		}
-		bool putMovePoints(Point s, Point d) {
-			return putMove(s.r, s.c, d.r, d.c);
-		}
-		bool putMoveMove(Move m) {
-			return putMovePoints(m.s, m.d);
-		}
-		
-		
+		out.close();
+		return false;
+	}		
 }

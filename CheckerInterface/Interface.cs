@@ -71,6 +71,7 @@ namespace CheckerInterface
                                     }
                                 }
                                 break;
+
                             case 1:
                                 // this enables the spaces that are the valid moves for the checker in cur.s
                                 if (berd.b[r, c] == 0)
@@ -88,6 +89,7 @@ namespace CheckerInterface
                                     }
                                 }
                                 break;
+
                             case 2:
                                 // this is basically a disableValids( previous move )
                                 foreach (Move m in berd.validMoves)
@@ -228,7 +230,7 @@ namespace CheckerInterface
             List<Move> temp = new List<Move>(berd.validMoves);
             foreach (Move m in temp)
             {
-                //MessageBox.Show(r+","+c+": "+m.s.r+","+m.s.c+" "+m.d.r+","+m.d.c);
+                MessageBox.Show(r+","+c+": "+m.s.r+","+m.s.c+" "+m.d.r+","+m.d.c);
 
                 PictureBox spots = this.Controls.Find(("spot" + m.s.r + "" + m.s.c), true).FirstOrDefault() as PictureBox;
                 PictureBox spotd = this.Controls.Find(("spot" + m.d.r + "" + m.d.c), true).FirstOrDefault() as PictureBox;
@@ -243,9 +245,10 @@ namespace CheckerInterface
                 {
                     if (m.s.r == r && m.s.c == c) // if click on checker
                     {
+                        MessageBox.Show("Click 1 @: " + r + "," + c);
                         if (cur.s.r == 0 && cur.s.c == 0) // if this is first time click checker
                         {
-                            //MessageBox.Show("robo break");
+                            
                             spots.Enabled = false;
                             spots.BackColor = Color.Cyan;
                             cur.s = new Point(r, c);
@@ -268,6 +271,7 @@ namespace CheckerInterface
                     }
                     else if (m.d.r == r && m.d.c == c) // if click in move spot
                     {
+                        MessageBox.Show("Click 2 @: " + r + "," + c);
                         //MessageBox.Show("curs "+cur.s.r + "," + cur.s.c);
                         cur.d = new Point(r, c);
                         if(berd.putMove(cur.s, cur.d)) // if you have a second jump
@@ -309,13 +313,30 @@ namespace CheckerInterface
                             {
                                 if (!player1 && berd.turn == -1)
                                 {
-                                    System.Diagnostics.Process.Start(browseBox1.Text);
-                                    makeWatcher();
+                                    //System.Diagnostics.Process.Start(browseBox1.Text);
+                                    //makeWatcher();
+                                    // Run the external process & wait for it to finish
+                                    using (System.Diagnostics.Process proc = System.Diagnostics.Process.Start(browseBox1.Text))
+                                    {
+                                        proc.WaitForExit();
+
+                                        // Retrieve the app's exit code
+                                        int exitCode = proc.ExitCode;
+                                    }
+                                    inputAI();
                                 }
                                 else if(!player2 && berd.turn == 1)
                                 {
-                                    System.Diagnostics.Process.Start(browseBox2.Text);
-                                    makeWatcher();
+                                    // System.Diagnostics.Process.Start(browseBox2.Text);
+                                    // makeWatcher();
+                                    using (System.Diagnostics.Process proc = System.Diagnostics.Process.Start(browseBox2.Text))
+                                    {
+                                        proc.WaitForExit();
+
+                                        // Retrieve the app's exit code
+                                        int exitCode = proc.ExitCode;
+                                    }
+                                    inputAI();
                                 }
                                 else
                                 {
@@ -386,62 +407,6 @@ namespace CheckerInterface
             watcher.EnableRaisingEvents = true;
         }
 
-        private void buttonStart_Click(object sender, EventArgs e)
-        {
-            buttonStart.Enabled = false;
-            groupBox1.Enabled = false;
-            groupBox2.Enabled = false;
-            buttonReset.Enabled = true;
-            berd = new Board();
-
-            berd.getBoard(ref berd.b);
-            this.placeCheckers();
-
-            this.disableAll();
-
-            if(player1)
-            {
-                this.enableValids(0);
-            }
-            else
-            {
-                System.Diagnostics.Process.Start(browseBox1.Text);
-
-                makeWatcher();
-            }
-
-
-        }
-
-        private void buttonReset_Click(object sender, EventArgs e)
-        {
-            buttonStart.Enabled = true;
-            groupBox1.Enabled = true;
-            groupBox2.Enabled = true;
-            radioHuman1.Checked = true;
-            radioHuman2.Checked = true;
-            browseBox1.Text = "";
-            browseBox2.Text = "";
-            //watcher.Dispose();
-
-            berd.b = new int[8, 8]  {{9,0,9,0,9,0,9,0},
-                                    {0,9,0,9,0,9,0,9},
-                                    {9,0,9,0,9,0,9,0},
-                                    {0,9,0,9,0,9,0,9},
-                                    {9,0,9,0,9,0,9,0},
-                                    {0,9,0,9,0,9,0,9},
-                                    {9,0,9,0,9,0,9,0},
-                                    {0,9,0,9,0,9,0,9}};
-            this.placeCheckers();
-            this.disableAll();
-        }
-
-
-
-
-
-
-
         void OnChanged(object sender, FileSystemEventArgs e)
         {
             watcher.Dispose();
@@ -472,6 +437,95 @@ namespace CheckerInterface
             }
         }
 
+        private void inputAI(){
+
+            string line = File.ReadAllLines("./move.txt")[0];
+            
+            //Point source = new Point(Convert.ToInt32(line.Split(':')[0].Split(',')[0]), Convert.ToInt32(line.Split(':')[0].Split(',')[1]));
+            //Point dest = new Point(Convert.ToInt32(line.Split(':')[1].Split(',')[0]), Convert.ToInt32(line.Split(':')[1].Split(',')[1]));
+            //s.r,s.c:d.r,d.c
+
+            string[] split = line.Split(':');
+            int r, c;
+            foreach (string s in split) {
+                r = Convert.ToInt32(s.Split(',')[0]);
+                c = Convert.ToInt32(s.Split(',')[1]);
+
+                this.click(r,c);
+            }
+            
+            ////berd.putMove(source,dest);
+            //if (!jumpMode)
+            //{
+            //    //MessageBox.Show(source.r +","+source.c+" "+dest.r+","+dest.c);
+
+            //    this.click(source.r, source.c);
+            //    this.click(dest.r, dest.c);
+            //}
+            //else
+            //{
+            //    this.click(dest.r, dest.c);
+            //    jumpMode = false;
+            //}
+        }
+
+        private void buttonStart_Click(object sender, EventArgs e)
+        {
+            buttonStart.Enabled = false;
+            groupBox1.Enabled = false;
+            groupBox2.Enabled = false;
+            buttonReset.Enabled = true;
+            berd = new Board();
+
+            berd.getBoard(ref berd.b);
+            this.placeCheckers();
+
+            this.disableAll();
+
+            if(player1)
+            {
+                this.enableValids(0);
+            }
+            else
+            {
+                using (System.Diagnostics.Process proc = System.Diagnostics.Process.Start(browseBox1.Text))
+                {
+                    proc.WaitForExit();
+
+                    // Retrieve the app's exit code
+                    int exitCode = proc.ExitCode;
+                }
+                inputAI();
+            }
+
+
+        }
+
+        private void buttonReset_Click(object sender, EventArgs e)
+        {
+            buttonStart.Enabled = true;
+            groupBox1.Enabled = true;
+            groupBox2.Enabled = true;
+            radioHuman1.Checked = true;
+            radioHuman2.Checked = true;
+            browseBox1.Text = "";
+            browseBox2.Text = "";
+            //watcher.Dispose();
+
+            berd.b = new int[8, 8]  {{9,0,9,0,9,0,9,0},
+                                    {0,9,0,9,0,9,0,9},
+                                    {9,0,9,0,9,0,9,0},
+                                    {0,9,0,9,0,9,0,9},
+                                    {9,0,9,0,9,0,9,0},
+                                    {0,9,0,9,0,9,0,9},
+                                    {9,0,9,0,9,0,9,0},
+                                    {0,9,0,9,0,9,0,9}};
+            this.placeCheckers();
+            this.disableAll();
+        }
+
+
+        // ################### Spot click events ################### //
         private void spot01_Click(object sender, EventArgs e)
         {
             click(0, 1);
