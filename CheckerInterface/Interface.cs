@@ -218,7 +218,7 @@ namespace CheckerInterface
         private void click(int r, int c)
         {
             if (watcher != null) { watcher.Dispose(); }
-            if (berd.turn == 1)
+            if (berd.turn == 1 && player2)
             {
                 r = 7 - r;
                 c = 7 - c;
@@ -230,7 +230,7 @@ namespace CheckerInterface
             List<Move> temp = new List<Move>(berd.validMoves);
             foreach (Move m in temp)
             {
-                MessageBox.Show(r+","+c+": "+m.s.r+","+m.s.c+" "+m.d.r+","+m.d.c);
+                //MessageBox.Show(r+","+c+": "+m.s.r+","+m.s.c+" "+m.d.r+","+m.d.c);
 
                 PictureBox spots = this.Controls.Find(("spot" + m.s.r + "" + m.s.c), true).FirstOrDefault() as PictureBox;
                 PictureBox spotd = this.Controls.Find(("spot" + m.d.r + "" + m.d.c), true).FirstOrDefault() as PictureBox;
@@ -245,7 +245,7 @@ namespace CheckerInterface
                 {
                     if (m.s.r == r && m.s.c == c) // if click on checker
                     {
-                        MessageBox.Show("Click 1 @: " + r + "," + c);
+                        //MessageBox.Show("Click 1 @: " + r + "," + c);
                         if (cur.s.r == 0 && cur.s.c == 0) // if this is first time click checker
                         {
                             
@@ -271,7 +271,7 @@ namespace CheckerInterface
                     }
                     else if (m.d.r == r && m.d.c == c) // if click in move spot
                     {
-                        MessageBox.Show("Click 2 @: " + r + "," + c);
+                        //MessageBox.Show("Click 2 @: " + r + "," + c);
                         //MessageBox.Show("curs "+cur.s.r + "," + cur.s.c);
                         cur.d = new Point(r, c);
                         if(berd.putMove(cur.s, cur.d)) // if you have a second jump
@@ -440,33 +440,34 @@ namespace CheckerInterface
         private void inputAI(){
 
             string line = File.ReadAllLines("./move.txt")[0];
+
+                //Point source = new Point(Convert.ToInt32(line.Split(':')[0].Split(',')[0]), Convert.ToInt32(line.Split(':')[0].Split(',')[1]));
+                //Point dest = new Point(Convert.ToInt32(line.Split(':')[1].Split(',')[0]), Convert.ToInt32(line.Split(':')[1].Split(',')[1]));
+                //s.r,s.c:d.r,d.c
+
+                string[] split = line.Split(':');
+                int r, c;
+                foreach (string s in split) {
+                    r = Convert.ToInt32(s.Split(',')[0]);
+                    c = Convert.ToInt32(s.Split(',')[1]);
+
+                    this.click(r, c);
+                }
+
+                ////berd.putMove(source,dest);
+                //if (!jumpMode)
+                //{
+                //    //MessageBox.Show(source.r +","+source.c+" "+dest.r+","+dest.c);
+
+                //    this.click(source.r, source.c);
+                //    this.click(dest.r, dest.c);
+                //}
+                //else
+                //{
+                //    this.click(dest.r, dest.c);
+                //    jumpMode = false;
+                //}
             
-            //Point source = new Point(Convert.ToInt32(line.Split(':')[0].Split(',')[0]), Convert.ToInt32(line.Split(':')[0].Split(',')[1]));
-            //Point dest = new Point(Convert.ToInt32(line.Split(':')[1].Split(',')[0]), Convert.ToInt32(line.Split(':')[1].Split(',')[1]));
-            //s.r,s.c:d.r,d.c
-
-            string[] split = line.Split(':');
-            int r, c;
-            foreach (string s in split) {
-                r = Convert.ToInt32(s.Split(',')[0]);
-                c = Convert.ToInt32(s.Split(',')[1]);
-
-                this.click(r,c);
-            }
-            
-            ////berd.putMove(source,dest);
-            //if (!jumpMode)
-            //{
-            //    //MessageBox.Show(source.r +","+source.c+" "+dest.r+","+dest.c);
-
-            //    this.click(source.r, source.c);
-            //    this.click(dest.r, dest.c);
-            //}
-            //else
-            //{
-            //    this.click(dest.r, dest.c);
-            //    jumpMode = false;
-            //}
         }
 
         private void buttonStart_Click(object sender, EventArgs e)

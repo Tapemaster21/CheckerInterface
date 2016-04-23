@@ -10,9 +10,12 @@ bool findJumps(Point p);
 bool findMoves(Point p);
 void printBoard();
 void printValidMoves();
+void updateBoard(Move m);
 
-static int board[8][8] = { };
+int board[8][8] = { };
 vector<Move> validMoves;
+vector<Point> points;
+bool jumpMode = false;
 
 
 void main() {
@@ -28,16 +31,31 @@ void main() {
 
 	cout << "Selected " << x+1 << "\n\t" << validMoves[x].s.r << "," << validMoves[x].s.c << " " << validMoves[x].d.r << "," << validMoves[x].d.c << endl;
 
-	vector<Point> points = { validMoves[x].s,validMoves[x].d };
+	points = { validMoves[x].s,validMoves[x].d };
+	
+	//looking for a second jump it doesnt get in here )= no idea why
 	Point dest = validMoves[x].d;
+	cout << dest.r << "," << dest.c << endl;
+	updateBoard(validMoves[x]);
+
+	printBoard();
+
 	if (findJumps(dest)) {
-		validMoves.clear();
-		points.push_back(validMoves[0].d);
+		cout << "shit";
 	}
+	points.push_back(validMoves[validMoves.size()-1].d);
+	
+
+
+
+
+	//conversion Bullshit
 	Point *ps = new Point[points.size()];
 	for (int i = 0; i < points.size(); i++) {
 		ps[i] = points[i];
 	}
+
+	printValidMoves();
 
 	putMove(ps,points.size());
 	system("pause");
@@ -111,6 +129,7 @@ void fillValidMoves() {
 				{
 					if (findJumps(p))
 					{
+						jumpMode = true;
 						forced = true;
 						validMoves.clear();
 						findJumps(p);
@@ -130,12 +149,14 @@ void fillValidMoves() {
 bool findJumps(Point p)
 {
 	bool found = false;
+
 	if (board[p.r][p.c] == 1 || board[p.r][p.c] == 2)
 	{
+		cout << "front checks ";
 		//check front left diag for oppo and front left  double diag for empty
 		if (p.r > 1 && p.c > 1 && (board[p.r - 1][p.c - 1] == -1 || board[p.r - 1][p.c - 1] == -2) && (board[p.r - 2][p.c - 2] == 0))
 		{
-			//add Move(piece][that double diag)
+			//add Move(piece, that double diag)
 			validMoves.push_back(Move(Point(p.r, p.c), Point(p.r - 2, p.c - 2)));
 			found = true;
 		}
@@ -143,8 +164,9 @@ bool findJumps(Point p)
 		//check front right diag for oppo and front right double diag for empty
 		if (p.r > 1 && p.c < 6 && (board[p.r - 1][p.c + 1] == -1 || board[p.r - 1][p.c + 1] == -2) && (board[p.r - 2][p.c + 2] == 0))
 		{
-			//add Move(piece][that double diag)
-			validMoves.push_back(Move(Point(p.r, p.c), Point(p.r - 2, p.c + 2)));
+			cout << "front Right ";
+			//add Move(piece, that double diag)
+			validMoves.push_back(Move( p, Point(p.r - 2, p.c + 2)));
 			found = true;
 		}
 	}
@@ -215,4 +237,30 @@ bool findMoves(Point p)
 	}
 
 	return found;
+}
+
+void updateBoard(Move m)
+{
+	if (abs(m.d.r - m.s.r) == 1)
+	{
+		board[m.d.r][m.d.c] = board[m.s.r][m.s.c];
+		board[m.s.r][m.s.c] = 0;
+	}
+	else if (abs(m.d.r - m.s.r) == 2)
+	{
+		board[m.d.r][m.d.c] = board[m.s.r][m.s.c];
+		board[m.s.r][m.s.c] = 0;
+		int kr = (m.d.r - m.s.r) / 2 + m.s.r;
+		int kc = (m.d.c - m.s.c) / 2 + m.s.c;
+
+		board[kr][kc] = 0;
+	}
+
+	if (m.d.r == 0)
+	{
+		board[m.d.r][m.d.c] = 2;
+	}
+
+
+	// Write board to a board.txt file
 }
