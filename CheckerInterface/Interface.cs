@@ -15,7 +15,7 @@ namespace CheckerInterface
 
     public partial class Interface : Form
     {
-        Board berd; // 
+        Board berd; 
         Move cur; // current move being performed
         Bitmap red, black, redQ, blackQ;
         bool player1 = false; // these tell if the player is human
@@ -301,7 +301,7 @@ namespace CheckerInterface
                             this.placeCheckers();
                             if (berd.over())
                             {
-                                string player = (berd.turn == -1 ? "Player 2 " : "Player 1 ");
+                                string player = (berd.turn == 1 ? "Player 2 " : "Player 1 ");
                                 MessageBox.Show(player + "won!");
                                 return;
                             }
@@ -321,9 +321,9 @@ namespace CheckerInterface
         {
             System.Diagnostics.ProcessStartInfo startinfo = new System.Diagnostics.ProcessStartInfo();
             startinfo.FileName = (number == 1 ? browseBox1.Text : browseBox2.Text);
-            startinfo.UseShellExecute = false;
-            startinfo.RedirectStandardOutput = true;
-            startinfo.CreateNoWindow = true;
+            startinfo.UseShellExecute = (number == 1 ? check1.Checked : check2.Checked);
+            //startinfo.RedirectStandardOutput = (number == 1 ? !check1.Checked : !check2.Checked);
+            startinfo.CreateNoWindow = (number == 1 ? !check1.Checked : !check2.Checked);
             using (System.Diagnostics.Process proc = System.Diagnostics.Process.Start(startinfo))
             {
                 if (!proc.WaitForExit(turnTime))
@@ -406,6 +406,7 @@ namespace CheckerInterface
                 player1 = false;
                 label1.Show();
                 browseBox1.Show();
+                check1.Show();
             }
             else
             {
@@ -417,6 +418,7 @@ namespace CheckerInterface
                 player1 = true;
                 label1.Hide();
                 browseBox1.Hide();
+                check1.Hide();
             }
             
         }
@@ -432,6 +434,7 @@ namespace CheckerInterface
                 player2 = false;
                 label2.Show();
                 browseBox2.Show();
+                check2.Show();
             }
             else
             {
@@ -443,6 +446,7 @@ namespace CheckerInterface
                 player2 = true;
                 label2.Hide();
                 browseBox2.Hide();
+                check2.Hide();
             }
         }
 

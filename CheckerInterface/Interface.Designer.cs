@@ -30,13 +30,13 @@
         {
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.labelScore1 = new System.Windows.Forms.Label();
+            this.check1 = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.browseBox1 = new System.Windows.Forms.TextBox();
             this.radioComputer1 = new System.Windows.Forms.RadioButton();
             this.radioHuman1 = new System.Windows.Forms.RadioButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.labelScore2 = new System.Windows.Forms.Label();
+            this.check2 = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.browseBox2 = new System.Windows.Forms.TextBox();
             this.radioComputer2 = new System.Windows.Forms.RadioButton();
@@ -179,16 +179,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.spot27)).BeginInit();
             this.SuspendLayout();
             // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.FileName = "openFileDialog1";
-            // 
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.labelScore1);
+            this.groupBox1.Controls.Add(this.check1);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.browseBox1);
             this.groupBox1.Controls.Add(this.radioComputer1);
@@ -200,14 +196,15 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Player 1";
             // 
-            // labelScore1
+            // check1
             // 
-            this.labelScore1.AutoSize = true;
-            this.labelScore1.Location = new System.Drawing.Point(10, 45);
-            this.labelScore1.Name = "labelScore1";
-            this.labelScore1.Size = new System.Drawing.Size(47, 13);
-            this.labelScore1.TabIndex = 4;
-            this.labelScore1.Text = "Score: 0";
+            this.check1.AutoSize = true;
+            this.check1.Location = new System.Drawing.Point(7, 43);
+            this.check1.Name = "check1";
+            this.check1.Size = new System.Drawing.Size(94, 17);
+            this.check1.TabIndex = 7;
+            this.check1.Text = "Show Console";
+            this.check1.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
@@ -257,7 +254,7 @@
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.labelScore2);
+            this.groupBox2.Controls.Add(this.check2);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.browseBox2);
             this.groupBox2.Controls.Add(this.radioComputer2);
@@ -269,14 +266,15 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Player 2";
             // 
-            // labelScore2
+            // check2
             // 
-            this.labelScore2.AutoSize = true;
-            this.labelScore2.Location = new System.Drawing.Point(10, 45);
-            this.labelScore2.Name = "labelScore2";
-            this.labelScore2.Size = new System.Drawing.Size(47, 13);
-            this.labelScore2.TabIndex = 5;
-            this.labelScore2.Text = "Score: 0";
+            this.check2.AutoSize = true;
+            this.check2.Location = new System.Drawing.Point(7, 42);
+            this.check2.Name = "check2";
+            this.check2.Size = new System.Drawing.Size(94, 17);
+            this.check2.TabIndex = 6;
+            this.check2.Text = "Show Console";
+            this.check2.UseVisualStyleBackColor = true;
             // 
             // label2
             // 
@@ -1155,8 +1153,10 @@
             // 
             // Interface
             // 
+            this.AcceptButton = this.buttonStart;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.buttonReset;
             this.ClientSize = new System.Drawing.Size(649, 469);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -1225,6 +1225,7 @@
             this.Controls.Add(this.spot47);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.spot27);
+            this.DoubleBuffered = true;
             this.MaximumSize = new System.Drawing.Size(1500, 508);
             this.MinimumSize = new System.Drawing.Size(665, 508);
             this.Name = "Interface";
@@ -1379,14 +1380,14 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Button buttonReset;
         private System.Windows.Forms.Button buttonStart;
-        private System.Windows.Forms.Label labelScore1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox browseBox1;
-        private System.Windows.Forms.Label labelScore2;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox browseBox2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.CheckBox check1;
+        private System.Windows.Forms.CheckBox check2;
     }
 }
 
