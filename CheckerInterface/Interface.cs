@@ -15,12 +15,12 @@ namespace CheckerInterface
 
     public partial class Interface : Form
     {
-        Board berd;
-        Move cur;
+        Board berd; // 
+        Move cur; // current move being performed
         Bitmap red, black, redQ, blackQ;
-        bool player1 = false;
+        bool player1 = false; // these tell if the player is human
         bool player2 = false;
-       
+        int turnTime; // in milliseconds
 
 
         public Interface()
@@ -317,35 +317,36 @@ namespace CheckerInterface
             }
         }
 
+        private void processStart(int number)
+        {
+            System.Diagnostics.ProcessStartInfo startinfo = new System.Diagnostics.ProcessStartInfo();
+            startinfo.FileName = (number == 1 ? browseBox1.Text : browseBox2.Text);
+            startinfo.UseShellExecute = false;
+            startinfo.RedirectStandardOutput = true;
+            startinfo.CreateNoWindow = true;
+            using (System.Diagnostics.Process proc = System.Diagnostics.Process.Start(startinfo))
+            {
+                if (!proc.WaitForExit(turnTime))
+                {
+                    proc.Kill();
+                    MessageBox.Show("Player " + (number == 1 ? "2" : "1") + " wins!\nPlayer " + number + " took too long on their turn.");
+                    return;
+                }
+            }
+            inputAI();
+        }
+
         private void changeTurn()
         {            
             berd.getBoard(ref berd.b);
             this.placeCheckers();
             if (!player1 && berd.turn == -1)
             {
-                System.Diagnostics.ProcessStartInfo startinfo = new System.Diagnostics.ProcessStartInfo();
-                startinfo.FileName = browseBox1.Text;
-                startinfo.UseShellExecute = false;
-                startinfo.RedirectStandardOutput = true;
-                startinfo.CreateNoWindow = true;
-                using (System.Diagnostics.Process proc = System.Diagnostics.Process.Start(startinfo))
-                {
-                    proc.WaitForExit();
-                }
-                inputAI();
+                processStart(1);
             }
             else if (!player2 && berd.turn == 1)
             {
-                System.Diagnostics.ProcessStartInfo startinfo = new System.Diagnostics.ProcessStartInfo();
-                startinfo.FileName = browseBox2.Text;
-                startinfo.UseShellExecute = false;
-                startinfo.RedirectStandardOutput = true;
-                startinfo.CreateNoWindow = true;
-                using (System.Diagnostics.Process proc = System.Diagnostics.Process.Start(startinfo))
-                {
-                    proc.WaitForExit();
-                }
-                inputAI();
+                processStart(2);
             }
             else
             {
@@ -359,32 +360,36 @@ namespace CheckerInterface
             }
         }
 
-        private void inputAI(){
-
-            string line = File.ReadAllLines("./move.txt")[0];
-
-            if (line != "pass")
+        private void inputAI()
+        {
+            if (File.ReadAllLines("./move.txt").Count() == 0) // if moves.txt is empty
             {
-                //s.r,s.c:d.r,d.c
-                string[] split = line.Split(':');
-                int r, c;
-                foreach (string s in split)
-                {
-                    r = Convert.ToInt32(s.Split(',')[0]);
-                    c = Convert.ToInt32(s.Split(',')[1]);
+                MessageBox.Show("ERROR! No lines read from moves.txt", "ERROR",MessageBoxButtons.OK , MessageBoxIcon.Error);
+            }
+            else // otherwise normal
+            { 
+                string line = File.ReadAllLines("./move.txt")[0];
 
-                    this.click(r, c);
+                if (line != "pass")
+                {
+                    //s.r,s.c:d.r,d.c
+                    string[] split = line.Split(':');
+                    int r, c;
+                    foreach (string s in split)
+                    {
+                        r = Convert.ToInt32(s.Split(',')[0]);
+                        c = Convert.ToInt32(s.Split(',')[1]);
+
+                        this.click(r, c);
+                    }
+                }
+                else //the player has passed
+                {
+                    this.enableValids(2);
+                    cur = new Move();
+                    changeTurn();
                 }
             }
-
-            //the player has passed
-            else
-            {
-                this.enableValids(2);
-                cur = new Move();
-                changeTurn();
-            }
-            
         }
 
 
@@ -394,28 +399,47 @@ namespace CheckerInterface
         {
             if (radioComputer1.Checked)
             {
+                label3.Visible = true;
+                comboBox1.Visible = true;
+                turnTime = Convert.ToInt32(comboBox1.Text) * 1000;
+
                 player1 = false;
                 label1.Show();
                 browseBox1.Show();
             }
             else
             {
+                if(!radioComputer2.Checked)
+                {
+                    label3.Visible = false;
+                    comboBox1.Visible = false;
+                }
                 player1 = true;
                 label1.Hide();
                 browseBox1.Hide();
             }
+            
         }
 
         private void radioHuman2_CheckedChanged(object sender, EventArgs e)
         {
             if (radioComputer2.Checked)
             {
+                label3.Visible = true;
+                comboBox1.Visible = true;
+                turnTime = Convert.ToInt32(comboBox1.Text) * 1000;
+
                 player2 = false;
                 label2.Show();
                 browseBox2.Show();
             }
             else
             {
+                if (!radioComputer1.Checked)
+                {
+                    label3.Visible = false;
+                    comboBox1.Visible = false;
+                }
                 player2 = true;
                 label2.Hide();
                 browseBox2.Hide();
@@ -455,19 +479,7 @@ namespace CheckerInterface
             }
             else
             {
-                System.Diagnostics.ProcessStartInfo startinfo = new System.Diagnostics.ProcessStartInfo();
-                startinfo.FileName = browseBox1.Text;
-                startinfo.UseShellExecute = false;
-                startinfo.RedirectStandardOutput = true;
-                startinfo.CreateNoWindow = true;
-                using (System.Diagnostics.Process proc = System.Diagnostics.Process.Start(startinfo))
-                {
-                    proc.WaitForExit();
-
-                    // Retrieve the app's exit code
-                    int exitCode = proc.ExitCode;
-                }
-                inputAI();
+                processStart(1);
             }
 
 
@@ -498,10 +510,15 @@ namespace CheckerInterface
             this.placeCheckers();
             this.disableAll();
         }
-        
-        
+
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            turnTime = comboBox1.Text == "Unlimited" ? -1 : (Convert.ToInt32(comboBox1.Text) * 1000);
+        }
+
         #region spot clicks
-        
+
         private void spot01_Click(object sender, EventArgs e)
         {
             click(0, 1);
@@ -646,6 +663,7 @@ namespace CheckerInterface
         {
             click(7, 0);
         }
+
 
         private void spot72_Click(object sender, EventArgs e)
         {

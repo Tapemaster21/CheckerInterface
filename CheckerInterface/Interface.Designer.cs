@@ -42,6 +42,8 @@
             this.radioComputer2 = new System.Windows.Forms.RadioButton();
             this.radioHuman2 = new System.Windows.Forms.RadioButton();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.buttonReset = new System.Windows.Forms.Button();
             this.buttonStart = new System.Windows.Forms.Button();
             this.spot70 = new System.Windows.Forms.PictureBox();
@@ -324,6 +326,8 @@
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox3.Controls.Add(this.label3);
+            this.groupBox3.Controls.Add(this.comboBox1);
             this.groupBox3.Controls.Add(this.buttonReset);
             this.groupBox3.Controls.Add(this.buttonStart);
             this.groupBox3.Location = new System.Drawing.Point(465, 241);
@@ -332,6 +336,30 @@
             this.groupBox3.TabIndex = 68;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Game";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(7, 49);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(102, 13);
+            this.label3.TabIndex = 3;
+            this.label3.Text = "Computer Time Limit";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "5",
+            "10",
+            "30",
+            "Unlimited"});
+            this.comboBox1.Location = new System.Drawing.Point(6, 67);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(75, 21);
+            this.comboBox1.TabIndex = 2;
+            this.comboBox1.Text = "5";
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // buttonReset
             // 
@@ -345,7 +373,7 @@
             // 
             // buttonStart
             // 
-            this.buttonStart.Location = new System.Drawing.Point(7, 19);
+            this.buttonStart.Location = new System.Drawing.Point(6, 19);
             this.buttonStart.Name = "buttonStart";
             this.buttonStart.Size = new System.Drawing.Size(75, 23);
             this.buttonStart.TabIndex = 0;
@@ -358,6 +386,7 @@
             this.spot70.BackColor = System.Drawing.Color.Tan;
             this.spot70.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot70.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot70.InitialImage = null;
             this.spot70.Location = new System.Drawing.Point(12, 404);
             this.spot70.Name = "spot70";
             this.spot70.Size = new System.Drawing.Size(55, 55);
@@ -370,6 +399,7 @@
             this.spot50.BackColor = System.Drawing.Color.Tan;
             this.spot50.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot50.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot50.InitialImage = null;
             this.spot50.Location = new System.Drawing.Point(12, 292);
             this.spot50.Name = "spot50";
             this.spot50.Size = new System.Drawing.Size(55, 55);
@@ -379,8 +409,8 @@
             // 
             // pictureBox35
             // 
-            this.pictureBox35.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox35.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox35.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox35.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox35.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox35.Location = new System.Drawing.Point(12, 348);
             this.pictureBox35.Name = "pictureBox35";
@@ -393,6 +423,7 @@
             this.spot30.BackColor = System.Drawing.Color.Tan;
             this.spot30.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot30.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot30.InitialImage = null;
             this.spot30.Location = new System.Drawing.Point(12, 180);
             this.spot30.Name = "spot30";
             this.spot30.Size = new System.Drawing.Size(55, 55);
@@ -402,9 +433,10 @@
             // 
             // pictureBox37
             // 
-            this.pictureBox37.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox37.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox37.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox37.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox37.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pictureBox37.InitialImage = null;
             this.pictureBox37.Location = new System.Drawing.Point(12, 12);
             this.pictureBox37.Name = "pictureBox37";
             this.pictureBox37.Size = new System.Drawing.Size(55, 55);
@@ -413,8 +445,8 @@
             // 
             // pictureBox38
             // 
-            this.pictureBox38.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox38.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox38.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox38.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox38.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox38.Location = new System.Drawing.Point(12, 236);
             this.pictureBox38.Name = "pictureBox38";
@@ -427,6 +459,7 @@
             this.spot10.BackColor = System.Drawing.Color.Tan;
             this.spot10.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot10.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot10.InitialImage = null;
             this.spot10.Location = new System.Drawing.Point(12, 68);
             this.spot10.Name = "spot10";
             this.spot10.Size = new System.Drawing.Size(55, 55);
@@ -436,8 +469,8 @@
             // 
             // pictureBox40
             // 
-            this.pictureBox40.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox40.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox40.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox40.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox40.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox40.Location = new System.Drawing.Point(12, 124);
             this.pictureBox40.Name = "pictureBox40";
@@ -447,8 +480,8 @@
             // 
             // pictureBox41
             // 
-            this.pictureBox41.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox41.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox41.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox41.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox41.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox41.Location = new System.Drawing.Point(68, 404);
             this.pictureBox41.Name = "pictureBox41";
@@ -458,8 +491,8 @@
             // 
             // pictureBox42
             // 
-            this.pictureBox42.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox42.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox42.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox42.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox42.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox42.Location = new System.Drawing.Point(68, 292);
             this.pictureBox42.Name = "pictureBox42";
@@ -472,6 +505,7 @@
             this.spot61.BackColor = System.Drawing.Color.Tan;
             this.spot61.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot61.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot61.InitialImage = null;
             this.spot61.Location = new System.Drawing.Point(68, 348);
             this.spot61.Name = "spot61";
             this.spot61.Size = new System.Drawing.Size(55, 55);
@@ -481,8 +515,8 @@
             // 
             // pictureBox44
             // 
-            this.pictureBox44.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox44.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox44.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox44.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox44.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox44.Location = new System.Drawing.Point(68, 180);
             this.pictureBox44.Name = "pictureBox44";
@@ -495,6 +529,7 @@
             this.spot01.BackColor = System.Drawing.Color.Tan;
             this.spot01.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot01.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot01.InitialImage = null;
             this.spot01.Location = new System.Drawing.Point(68, 12);
             this.spot01.Name = "spot01";
             this.spot01.Size = new System.Drawing.Size(55, 55);
@@ -507,6 +542,7 @@
             this.spot41.BackColor = System.Drawing.Color.Tan;
             this.spot41.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot41.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot41.InitialImage = null;
             this.spot41.Location = new System.Drawing.Point(68, 236);
             this.spot41.Name = "spot41";
             this.spot41.Size = new System.Drawing.Size(55, 55);
@@ -516,8 +552,8 @@
             // 
             // pictureBox47
             // 
-            this.pictureBox47.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox47.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox47.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox47.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox47.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox47.Location = new System.Drawing.Point(68, 68);
             this.pictureBox47.Name = "pictureBox47";
@@ -530,6 +566,7 @@
             this.spot21.BackColor = System.Drawing.Color.Tan;
             this.spot21.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot21.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot21.InitialImage = null;
             this.spot21.Location = new System.Drawing.Point(68, 124);
             this.spot21.Name = "spot21";
             this.spot21.Size = new System.Drawing.Size(55, 55);
@@ -542,6 +579,7 @@
             this.spot72.BackColor = System.Drawing.Color.Tan;
             this.spot72.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot72.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot72.InitialImage = null;
             this.spot72.Location = new System.Drawing.Point(124, 404);
             this.spot72.Name = "spot72";
             this.spot72.Size = new System.Drawing.Size(55, 55);
@@ -554,6 +592,7 @@
             this.spot52.BackColor = System.Drawing.Color.Tan;
             this.spot52.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot52.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot52.InitialImage = null;
             this.spot52.Location = new System.Drawing.Point(124, 292);
             this.spot52.Name = "spot52";
             this.spot52.Size = new System.Drawing.Size(55, 55);
@@ -563,8 +602,8 @@
             // 
             // pictureBox51
             // 
-            this.pictureBox51.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox51.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox51.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox51.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox51.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox51.Location = new System.Drawing.Point(124, 348);
             this.pictureBox51.Name = "pictureBox51";
@@ -577,6 +616,7 @@
             this.spot32.BackColor = System.Drawing.Color.Tan;
             this.spot32.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot32.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot32.InitialImage = null;
             this.spot32.Location = new System.Drawing.Point(124, 180);
             this.spot32.Name = "spot32";
             this.spot32.Size = new System.Drawing.Size(55, 55);
@@ -586,8 +626,8 @@
             // 
             // pictureBox53
             // 
-            this.pictureBox53.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox53.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox53.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox53.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox53.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox53.Location = new System.Drawing.Point(124, 12);
             this.pictureBox53.Name = "pictureBox53";
@@ -597,8 +637,8 @@
             // 
             // pictureBox54
             // 
-            this.pictureBox54.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox54.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox54.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox54.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox54.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox54.Location = new System.Drawing.Point(124, 236);
             this.pictureBox54.Name = "pictureBox54";
@@ -611,6 +651,7 @@
             this.spot12.BackColor = System.Drawing.Color.Tan;
             this.spot12.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot12.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot12.InitialImage = null;
             this.spot12.Location = new System.Drawing.Point(124, 68);
             this.spot12.Name = "spot12";
             this.spot12.Size = new System.Drawing.Size(55, 55);
@@ -620,8 +661,8 @@
             // 
             // pictureBox56
             // 
-            this.pictureBox56.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox56.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox56.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox56.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox56.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox56.Location = new System.Drawing.Point(124, 124);
             this.pictureBox56.Name = "pictureBox56";
@@ -631,8 +672,8 @@
             // 
             // pictureBox57
             // 
-            this.pictureBox57.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox57.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox57.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox57.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox57.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox57.Location = new System.Drawing.Point(180, 404);
             this.pictureBox57.Name = "pictureBox57";
@@ -642,8 +683,8 @@
             // 
             // pictureBox58
             // 
-            this.pictureBox58.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox58.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox58.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox58.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox58.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox58.Location = new System.Drawing.Point(180, 292);
             this.pictureBox58.Name = "pictureBox58";
@@ -656,6 +697,7 @@
             this.spot63.BackColor = System.Drawing.Color.Tan;
             this.spot63.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot63.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot63.InitialImage = null;
             this.spot63.Location = new System.Drawing.Point(180, 348);
             this.spot63.Name = "spot63";
             this.spot63.Size = new System.Drawing.Size(55, 55);
@@ -665,8 +707,8 @@
             // 
             // pictureBox60
             // 
-            this.pictureBox60.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox60.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox60.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox60.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox60.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox60.Location = new System.Drawing.Point(180, 180);
             this.pictureBox60.Name = "pictureBox60";
@@ -679,6 +721,7 @@
             this.spot03.BackColor = System.Drawing.Color.Tan;
             this.spot03.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot03.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot03.InitialImage = null;
             this.spot03.Location = new System.Drawing.Point(180, 12);
             this.spot03.Name = "spot03";
             this.spot03.Size = new System.Drawing.Size(55, 55);
@@ -691,6 +734,7 @@
             this.spot43.BackColor = System.Drawing.Color.Tan;
             this.spot43.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot43.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot43.InitialImage = null;
             this.spot43.Location = new System.Drawing.Point(180, 236);
             this.spot43.Name = "spot43";
             this.spot43.Size = new System.Drawing.Size(55, 55);
@@ -700,8 +744,8 @@
             // 
             // pictureBox63
             // 
-            this.pictureBox63.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox63.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox63.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox63.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox63.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox63.Location = new System.Drawing.Point(180, 68);
             this.pictureBox63.Name = "pictureBox63";
@@ -714,6 +758,7 @@
             this.spot23.BackColor = System.Drawing.Color.Tan;
             this.spot23.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot23.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot23.InitialImage = null;
             this.spot23.Location = new System.Drawing.Point(180, 124);
             this.spot23.Name = "spot23";
             this.spot23.Size = new System.Drawing.Size(55, 55);
@@ -726,6 +771,7 @@
             this.spot74.BackColor = System.Drawing.Color.Tan;
             this.spot74.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot74.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot74.InitialImage = null;
             this.spot74.Location = new System.Drawing.Point(236, 404);
             this.spot74.Name = "spot74";
             this.spot74.Size = new System.Drawing.Size(55, 55);
@@ -738,6 +784,7 @@
             this.spot54.BackColor = System.Drawing.Color.Tan;
             this.spot54.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot54.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot54.InitialImage = null;
             this.spot54.Location = new System.Drawing.Point(236, 292);
             this.spot54.Name = "spot54";
             this.spot54.Size = new System.Drawing.Size(55, 55);
@@ -747,8 +794,8 @@
             // 
             // pictureBox19
             // 
-            this.pictureBox19.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox19.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox19.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox19.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox19.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox19.Location = new System.Drawing.Point(236, 348);
             this.pictureBox19.Name = "pictureBox19";
@@ -762,6 +809,7 @@
             this.spot34.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot34.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.spot34.Enabled = false;
+            this.spot34.InitialImage = null;
             this.spot34.Location = new System.Drawing.Point(236, 180);
             this.spot34.Name = "spot34";
             this.spot34.Size = new System.Drawing.Size(55, 55);
@@ -771,8 +819,8 @@
             // 
             // pictureBox21
             // 
-            this.pictureBox21.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox21.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox21.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox21.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox21.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox21.Location = new System.Drawing.Point(236, 12);
             this.pictureBox21.Name = "pictureBox21";
@@ -782,8 +830,8 @@
             // 
             // pictureBox22
             // 
-            this.pictureBox22.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox22.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox22.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox22.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox22.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox22.Location = new System.Drawing.Point(236, 236);
             this.pictureBox22.Name = "pictureBox22";
@@ -796,6 +844,7 @@
             this.spot14.BackColor = System.Drawing.Color.Tan;
             this.spot14.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot14.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot14.InitialImage = null;
             this.spot14.Location = new System.Drawing.Point(236, 68);
             this.spot14.Name = "spot14";
             this.spot14.Size = new System.Drawing.Size(55, 55);
@@ -805,8 +854,8 @@
             // 
             // pictureBox24
             // 
-            this.pictureBox24.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox24.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox24.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox24.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox24.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox24.Location = new System.Drawing.Point(236, 124);
             this.pictureBox24.Name = "pictureBox24";
@@ -816,8 +865,8 @@
             // 
             // pictureBox25
             // 
-            this.pictureBox25.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox25.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox25.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox25.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox25.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox25.Location = new System.Drawing.Point(292, 404);
             this.pictureBox25.Name = "pictureBox25";
@@ -827,8 +876,8 @@
             // 
             // pictureBox26
             // 
-            this.pictureBox26.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox26.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox26.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox26.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox26.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox26.Location = new System.Drawing.Point(292, 292);
             this.pictureBox26.Name = "pictureBox26";
@@ -841,6 +890,7 @@
             this.spot65.BackColor = System.Drawing.Color.Tan;
             this.spot65.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot65.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot65.InitialImage = null;
             this.spot65.Location = new System.Drawing.Point(292, 348);
             this.spot65.Name = "spot65";
             this.spot65.Size = new System.Drawing.Size(55, 55);
@@ -850,8 +900,8 @@
             // 
             // pictureBox28
             // 
-            this.pictureBox28.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox28.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox28.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox28.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox28.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox28.Location = new System.Drawing.Point(292, 180);
             this.pictureBox28.Name = "pictureBox28";
@@ -864,6 +914,7 @@
             this.spot05.BackColor = System.Drawing.Color.Tan;
             this.spot05.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot05.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot05.InitialImage = null;
             this.spot05.Location = new System.Drawing.Point(292, 12);
             this.spot05.Name = "spot05";
             this.spot05.Size = new System.Drawing.Size(55, 55);
@@ -876,6 +927,7 @@
             this.spot45.BackColor = System.Drawing.Color.Tan;
             this.spot45.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot45.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot45.InitialImage = null;
             this.spot45.Location = new System.Drawing.Point(292, 236);
             this.spot45.Name = "spot45";
             this.spot45.Size = new System.Drawing.Size(55, 55);
@@ -885,8 +937,8 @@
             // 
             // pictureBox31
             // 
-            this.pictureBox31.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox31.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox31.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox31.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox31.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox31.Location = new System.Drawing.Point(292, 68);
             this.pictureBox31.Name = "pictureBox31";
@@ -899,6 +951,7 @@
             this.spot25.BackColor = System.Drawing.Color.Tan;
             this.spot25.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot25.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot25.InitialImage = null;
             this.spot25.Location = new System.Drawing.Point(292, 124);
             this.spot25.Name = "spot25";
             this.spot25.Size = new System.Drawing.Size(55, 55);
@@ -911,6 +964,7 @@
             this.spot76.BackColor = System.Drawing.Color.Tan;
             this.spot76.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot76.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot76.InitialImage = null;
             this.spot76.Location = new System.Drawing.Point(348, 404);
             this.spot76.Name = "spot76";
             this.spot76.Size = new System.Drawing.Size(55, 55);
@@ -923,6 +977,7 @@
             this.spot56.BackColor = System.Drawing.Color.Tan;
             this.spot56.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot56.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot56.InitialImage = null;
             this.spot56.Location = new System.Drawing.Point(348, 292);
             this.spot56.Name = "spot56";
             this.spot56.Size = new System.Drawing.Size(55, 55);
@@ -932,8 +987,8 @@
             // 
             // pictureBox11
             // 
-            this.pictureBox11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox11.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox11.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox11.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox11.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox11.Location = new System.Drawing.Point(348, 348);
             this.pictureBox11.Name = "pictureBox11";
@@ -946,6 +1001,7 @@
             this.spot36.BackColor = System.Drawing.Color.Tan;
             this.spot36.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot36.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot36.InitialImage = null;
             this.spot36.Location = new System.Drawing.Point(348, 180);
             this.spot36.Name = "spot36";
             this.spot36.Size = new System.Drawing.Size(55, 55);
@@ -955,8 +1011,8 @@
             // 
             // pictureBox13
             // 
-            this.pictureBox13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox13.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox13.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox13.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox13.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox13.Location = new System.Drawing.Point(348, 12);
             this.pictureBox13.Name = "pictureBox13";
@@ -966,8 +1022,8 @@
             // 
             // pictureBox14
             // 
-            this.pictureBox14.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox14.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox14.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox14.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox14.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox14.Location = new System.Drawing.Point(348, 236);
             this.pictureBox14.Name = "pictureBox14";
@@ -980,6 +1036,7 @@
             this.spot16.BackColor = System.Drawing.Color.Tan;
             this.spot16.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot16.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot16.InitialImage = null;
             this.spot16.Location = new System.Drawing.Point(348, 68);
             this.spot16.Name = "spot16";
             this.spot16.Size = new System.Drawing.Size(55, 55);
@@ -989,9 +1046,10 @@
             // 
             // pictureBox16
             // 
-            this.pictureBox16.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox16.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox16.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox16.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox16.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pictureBox16.InitialImage = null;
             this.pictureBox16.Location = new System.Drawing.Point(348, 124);
             this.pictureBox16.Name = "pictureBox16";
             this.pictureBox16.Size = new System.Drawing.Size(55, 55);
@@ -1000,8 +1058,8 @@
             // 
             // pictureBox6
             // 
-            this.pictureBox6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox6.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox6.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox6.Location = new System.Drawing.Point(404, 404);
             this.pictureBox6.Name = "pictureBox6";
@@ -1011,8 +1069,8 @@
             // 
             // pictureBox9
             // 
-            this.pictureBox9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox9.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox9.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox9.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox9.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox9.Location = new System.Drawing.Point(404, 292);
             this.pictureBox9.Name = "pictureBox9";
@@ -1025,6 +1083,7 @@
             this.spot67.BackColor = System.Drawing.Color.Tan;
             this.spot67.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot67.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot67.InitialImage = null;
             this.spot67.Location = new System.Drawing.Point(404, 348);
             this.spot67.Name = "spot67";
             this.spot67.Size = new System.Drawing.Size(55, 55);
@@ -1034,8 +1093,8 @@
             // 
             // pictureBox5
             // 
-            this.pictureBox5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox5.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox5.Location = new System.Drawing.Point(404, 180);
             this.pictureBox5.Name = "pictureBox5";
@@ -1048,6 +1107,7 @@
             this.spot07.BackColor = System.Drawing.Color.Tan;
             this.spot07.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot07.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot07.InitialImage = null;
             this.spot07.Location = new System.Drawing.Point(404, 12);
             this.spot07.Name = "spot07";
             this.spot07.Size = new System.Drawing.Size(55, 55);
@@ -1060,6 +1120,7 @@
             this.spot47.BackColor = System.Drawing.Color.Tan;
             this.spot47.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot47.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot47.InitialImage = null;
             this.spot47.Location = new System.Drawing.Point(404, 236);
             this.spot47.Name = "spot47";
             this.spot47.Size = new System.Drawing.Size(55, 55);
@@ -1069,9 +1130,10 @@
             // 
             // pictureBox2
             // 
-            this.pictureBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox2.BackColor = System.Drawing.Color.PeachPuff;
+            this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pictureBox2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pictureBox2.InitialImage = null;
             this.pictureBox2.Location = new System.Drawing.Point(404, 68);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(55, 55);
@@ -1083,6 +1145,7 @@
             this.spot27.BackColor = System.Drawing.Color.Tan;
             this.spot27.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.spot27.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.spot27.InitialImage = null;
             this.spot27.Location = new System.Drawing.Point(404, 124);
             this.spot27.Name = "spot27";
             this.spot27.Size = new System.Drawing.Size(55, 55);
@@ -1171,6 +1234,7 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.spot70)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.spot50)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox35)).EndInit();
@@ -1321,6 +1385,8 @@
         private System.Windows.Forms.Label labelScore2;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox browseBox2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }
 
