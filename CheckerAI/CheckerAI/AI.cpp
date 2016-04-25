@@ -2,7 +2,7 @@
 #include <vector>
 #include <cmath>
 #include <time.h>
-
+#include <Windows.h>
 
 using namespace Checkers;
 void fillValidMoves();
@@ -24,41 +24,41 @@ void main() {
 	printBoard();
 
 	fillValidMoves();
-	printValidMoves();
+	if (!validMoves.empty()) {
+		printValidMoves();
 
-	srand(time(NULL));
-	int x = rand() % (validMoves.size());
+		srand(time(NULL));
+		int x = rand() % (validMoves.size());
 
-	cout << "Selected " << x+1 << "\n\t" << validMoves[x].s.r << "," << validMoves[x].s.c << " " << validMoves[x].d.r << "," << validMoves[x].d.c << endl;
+		cout << "Selected " << x + 1 << "\n\t" << validMoves[x].s.r << "," << validMoves[x].s.c << " " << validMoves[x].d.r << "," << validMoves[x].d.c << endl;
 
-	points = { validMoves[x].s,validMoves[x].d };
-	
-	//looking for a second jump it doesnt get in here )= no idea why
-	Point dest = validMoves[x].d;
-	cout << dest.r << "," << dest.c << endl;
-	updateBoard(validMoves[x]);
+		points = { validMoves[x].s,validMoves[x].d };
 
-	printBoard();
+		Point dest = validMoves[x].d;
+		cout << dest.r << "," << dest.c << endl;
+		updateBoard(validMoves[x]);
+		validMoves.clear();
 
-	if (findJumps(dest)) {
-		cout << "shit";
+		printBoard();
+
+		while(jumpMode && findJumps(dest)) {
+			points.push_back(validMoves[validMoves.size() - 1].d);
+			updateBoard(validMoves[validMoves.size() - 1]);
+			dest = validMoves[validMoves.size() - 1].d;
+		}
+
+		//conversion Bullshit
+		
+		printValidMoves();
+
+		//Sleep(250);
+
+		putMove(points);
 	}
-	points.push_back(validMoves[validMoves.size()-1].d);
-	
-
-
-
-
-	//conversion Bullshit
-	Point *ps = new Point[points.size()];
-	for (int i = 0; i < points.size(); i++) {
-		ps[i] = points[i];
+	else {
+		pass();
 	}
-
-	printValidMoves();
-
-	putMove(ps,points.size());
-	system("pause");
+	//system("pause");
 }
 
 void printBoard()
@@ -117,7 +117,7 @@ void fillValidMoves() {
 	{
 		for (int c = 0; c < 8; c++)
 		{
-			if (board[r][c] == 1)
+			if (board[r][c] == 1 || board[r][c] == 2)
 			{
 				p.r = r;
 				p.c = c;
@@ -157,7 +157,7 @@ bool findJumps(Point p)
 		if (p.r > 1 && p.c > 1 && (board[p.r - 1][p.c - 1] == -1 || board[p.r - 1][p.c - 1] == -2) && (board[p.r - 2][p.c - 2] == 0))
 		{
 			//add Move(piece, that double diag)
-			validMoves.push_back(Move(Point(p.r, p.c), Point(p.r - 2, p.c - 2)));
+			validMoves.push_back(Move(p, Point(p.r - 2, p.c - 2)));
 			found = true;
 		}
 
@@ -177,7 +177,7 @@ bool findJumps(Point p)
 		if (p.r < 6 && p.c > 1 && (board[p.r + 1][p.c - 1] == -1 || board[p.r + 1][p.c - 1] == -2) && (board[p.r + 2][p.c - 2] == 0))
 		{
 			//add Move(piece][that double diag)
-			validMoves.push_back(Move(Point(p.r, p.c), Point(p.r + 2, p.c - 2)));
+			validMoves.push_back(Move(p, Point(p.r + 2, p.c - 2)));
 			found = true;
 		}
 
@@ -185,7 +185,7 @@ bool findJumps(Point p)
 		if (p.r < 6 && p.c < 6 && (board[p.r + 1][p.c + 1] == -1 || board[p.r + 1][p.c + 1] == -2) && (board[p.r + 2][p.c + 2] == 0))
 		{
 			//add Move(piece][that double diag)
-			validMoves.push_back(Move(Point(p.r, p.c), Point(p.r + 2, p.c + 2)));
+			validMoves.push_back(Move(p, Point(p.r + 2, p.c + 2)));
 			found = true;
 		}
 	}
@@ -203,7 +203,7 @@ bool findMoves(Point p)
 		if (p.r > 0 && p.c > 0 && board[p.r - 1][p.c - 1] == 0)
 		{
 			//add Move(piece][that double diag)
-			validMoves.push_back(Move(Point(p.r, p.c), Point(p.r - 1, p.c - 1)));
+			validMoves.push_back(Move(p, Point(p.r - 1, p.c - 1)));
 			found = true;
 		}
 
@@ -211,7 +211,7 @@ bool findMoves(Point p)
 		if (p.r > 0 && p.c < 7 && board[p.r - 1][p.c + 1] == 0)
 		{
 			//add Move(piece][that double diag)
-			validMoves.push_back(Move(Point(p.r, p.c), Point(p.r - 1, p.c + 1)));
+			validMoves.push_back(Move(p, Point(p.r - 1, p.c + 1)));
 			found = true;
 		}
 
@@ -223,7 +223,7 @@ bool findMoves(Point p)
 		if (p.r < 7 && p.c > 0 && board[p.r + 1][p.c - 1] == 0)
 		{
 			//add Move(piece][that double diag)
-			validMoves.push_back(Move( Point(p.r, p.c), Point(p.r + 1, p.c - 1)));
+			validMoves.push_back(Move(p, Point(p.r + 1, p.c - 1)));
 			found = true;
 		}
 
@@ -231,7 +231,7 @@ bool findMoves(Point p)
 		if (p.r < 7 && p.c < 7 && board[p.r + 1][p.c + 1] == 0)
 		{
 			//add Move(piece][that double diag)
-			validMoves.push_back(Move( Point(p.r, p.c), Point(p.r + 1, p.c + 1)));
+			validMoves.push_back(Move(p, Point(p.r + 1, p.c + 1)));
 			found = true;
 		}
 	}

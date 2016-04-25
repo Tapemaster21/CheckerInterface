@@ -20,8 +20,7 @@ namespace CheckerInterface
         Bitmap red, black, redQ, blackQ;
         bool player1 = false;
         bool player2 = false;
-        FileSystemWatcher watcher;
-        bool jumpMode = false;
+       
 
 
         public Interface()
@@ -217,16 +216,13 @@ namespace CheckerInterface
         
         private void click(int r, int c)
         {
-            if (watcher != null) { watcher.Dispose(); }
+           
             if (berd.turn == 1 && player2)
             {
                 r = 7 - r;
                 c = 7 - c;
             }
-            if (berd.validMoves == null)
-            { MessageBox.Show("you done did it now"); }
-            
-
+                        
             List<Move> temp = new List<Move>(berd.validMoves);
             foreach (Move m in temp)
             {
@@ -278,12 +274,11 @@ namespace CheckerInterface
                         {
                             if ((!player1 && berd.turn == -1) || (!player2 && berd.turn == 1))
                             {
-                                makeWatcher();
                                 this.placeCheckers();
-                                jumpMode = true;
+                                //jumpMode = true;
                                 cur.s = cur.d;
                                 cur.d = new Point();
-                                return;
+                                //inputAI();
                             }
                             else
                             {
@@ -302,55 +297,99 @@ namespace CheckerInterface
                             this.enableValids(2);
                             
                             cur = new Move();
-                            berd.getBoard(ref berd.b);
+                            //berd.getBoard(ref berd.b);
                             this.placeCheckers();
                             if (berd.over())
                             {
                                 string player = (berd.turn == -1 ? "Player 2 " : "Player 1 ");
                                 MessageBox.Show(player + "won!");
+                                return;
                             }
                             else
                             {
-                                if (!player1 && berd.turn == -1)
-                                {
-                                    //System.Diagnostics.Process.Start(browseBox1.Text);
-                                    //makeWatcher();
-                                    // Run the external process & wait for it to finish
-                                    using (System.Diagnostics.Process proc = System.Diagnostics.Process.Start(browseBox1.Text))
-                                    {
-                                        proc.WaitForExit();
-
-                                        // Retrieve the app's exit code
-                                        int exitCode = proc.ExitCode;
-                                    }
-                                    inputAI();
-                                }
-                                else if(!player2 && berd.turn == 1)
-                                {
-                                    // System.Diagnostics.Process.Start(browseBox2.Text);
-                                    // makeWatcher();
-                                    using (System.Diagnostics.Process proc = System.Diagnostics.Process.Start(browseBox2.Text))
-                                    {
-                                        proc.WaitForExit();
-
-                                        // Retrieve the app's exit code
-                                        int exitCode = proc.ExitCode;
-                                    }
-                                    inputAI();
-                                }
-                                else
-                                {
-                                    //MessageBox.Show("my turn");
-                                    this.enableValids(0);
-                                }
+                                changeTurn();
                             }
                             return;
                         }
+
                     }
                 }
             }
         }
-        
+
+        private void changeTurn()
+        {            
+            berd.getBoard(ref berd.b);
+            this.placeCheckers();
+            if (!player1 && berd.turn == -1)
+            {
+                System.Diagnostics.ProcessStartInfo startinfo = new System.Diagnostics.ProcessStartInfo();
+                startinfo.FileName = browseBox1.Text;
+                startinfo.UseShellExecute = false;
+                startinfo.RedirectStandardOutput = true;
+                startinfo.CreateNoWindow = true;
+                using (System.Diagnostics.Process proc = System.Diagnostics.Process.Start(startinfo))
+                {
+                    proc.WaitForExit();
+                }
+                inputAI();
+            }
+            else if (!player2 && berd.turn == 1)
+            {
+                System.Diagnostics.ProcessStartInfo startinfo = new System.Diagnostics.ProcessStartInfo();
+                startinfo.FileName = browseBox2.Text;
+                startinfo.UseShellExecute = false;
+                startinfo.RedirectStandardOutput = true;
+                startinfo.CreateNoWindow = true;
+                using (System.Diagnostics.Process proc = System.Diagnostics.Process.Start(startinfo))
+                {
+                    proc.WaitForExit();
+                }
+                inputAI();
+            }
+            else
+            {
+                this.enableValids(0);
+            }
+            if (berd.validMoves.Count == 0)
+            {
+                MessageBox.Show("You have no valid moves.\n You must pass your turn.");
+                changeTurn();
+                return;
+            }
+        }
+
+        private void inputAI(){
+
+            string line = File.ReadAllLines("./move.txt")[0];
+
+            if (line != "pass")
+            {
+                //s.r,s.c:d.r,d.c
+                string[] split = line.Split(':');
+                int r, c;
+                foreach (string s in split)
+                {
+                    r = Convert.ToInt32(s.Split(',')[0]);
+                    c = Convert.ToInt32(s.Split(',')[1]);
+
+                    this.click(r, c);
+                }
+            }
+
+            //the player has passed
+            else
+            {
+                this.enableValids(2);
+                cur = new Move();
+                changeTurn();
+            }
+            
+        }
+
+
+        //---------------BUTTONS-----------//
+
         private void radioHuman1_CheckedChanged(object sender, EventArgs e)
         {
             if (radioComputer1.Checked)
@@ -396,80 +435,7 @@ namespace CheckerInterface
             openFileDialog1.ShowDialog();
             browseBox2.Text = openFileDialog1.FileName;
         }
-
-        private void makeWatcher()
-        {
-            //watcher.Dispose();
-            watcher = new FileSystemWatcher(Environment.CurrentDirectory);
-            watcher.Filter = "move.txt";
-            watcher.NotifyFilter = NotifyFilters.LastWrite;
-            watcher.Changed += new FileSystemEventHandler(OnChanged);
-            watcher.EnableRaisingEvents = true;
-        }
-
-        void OnChanged(object sender, FileSystemEventArgs e)
-        {
-            watcher.Dispose();
-            // This is firing twice and seems to be a bug in the filesystemwatcher
-            // so if we only save file the file by the minute, we shouldn't run into issues.
-
-            // read move in from file
-            //MessageBox.Show("changed fired");
-            string line = File.ReadAllLines("./move.txt")[0];
-
-            Point source = new Point(Convert.ToInt32(line.Split(':')[0].Split(',')[0]), Convert.ToInt32(line.Split(':')[0].Split(',')[1]));
-            Point dest = new Point(Convert.ToInt32(line.Split(':')[1].Split(',')[0]), Convert.ToInt32(line.Split(':')[1].Split(',')[1]));
-            //s.r,s.c:d.r,d.c
-
-            //berd.putMove(source,dest);
-            // LOL
-            if (!jumpMode)
-            {
-                //MessageBox.Show(source.r +","+source.c+" "+dest.r+","+dest.c);
-
-                this.click(source.r, source.c);
-                this.click(dest.r, dest.c);
-            }
-            else
-            {
-                this.click(dest.r, dest.c);
-                jumpMode = false;
-            }
-        }
-
-        private void inputAI(){
-
-            string line = File.ReadAllLines("./move.txt")[0];
-
-                //Point source = new Point(Convert.ToInt32(line.Split(':')[0].Split(',')[0]), Convert.ToInt32(line.Split(':')[0].Split(',')[1]));
-                //Point dest = new Point(Convert.ToInt32(line.Split(':')[1].Split(',')[0]), Convert.ToInt32(line.Split(':')[1].Split(',')[1]));
-                //s.r,s.c:d.r,d.c
-
-                string[] split = line.Split(':');
-                int r, c;
-                foreach (string s in split) {
-                    r = Convert.ToInt32(s.Split(',')[0]);
-                    c = Convert.ToInt32(s.Split(',')[1]);
-
-                    this.click(r, c);
-                }
-
-                ////berd.putMove(source,dest);
-                //if (!jumpMode)
-                //{
-                //    //MessageBox.Show(source.r +","+source.c+" "+dest.r+","+dest.c);
-
-                //    this.click(source.r, source.c);
-                //    this.click(dest.r, dest.c);
-                //}
-                //else
-                //{
-                //    this.click(dest.r, dest.c);
-                //    jumpMode = false;
-                //}
-            
-        }
-
+        
         private void buttonStart_Click(object sender, EventArgs e)
         {
             buttonStart.Enabled = false;
@@ -489,7 +455,12 @@ namespace CheckerInterface
             }
             else
             {
-                using (System.Diagnostics.Process proc = System.Diagnostics.Process.Start(browseBox1.Text))
+                System.Diagnostics.ProcessStartInfo startinfo = new System.Diagnostics.ProcessStartInfo();
+                startinfo.FileName = browseBox1.Text;
+                startinfo.UseShellExecute = false;
+                startinfo.RedirectStandardOutput = true;
+                startinfo.CreateNoWindow = true;
+                using (System.Diagnostics.Process proc = System.Diagnostics.Process.Start(startinfo))
                 {
                     proc.WaitForExit();
 
@@ -507,13 +478,15 @@ namespace CheckerInterface
             buttonStart.Enabled = true;
             groupBox1.Enabled = true;
             groupBox2.Enabled = true;
-            radioHuman1.Checked = true;
-            radioHuman2.Checked = true;
-            browseBox1.Text = "";
-            browseBox2.Text = "";
-            //watcher.Dispose();
+            //radioHuman1.Checked = true;
+            //radioHuman2.Checked = true;
+            //browseBox1.Text = "";
+            //browseBox2.Text = "";
 
-            berd.b = new int[8, 8]  {{9,0,9,0,9,0,9,0},
+
+            berd = new Board();
+                /*
+                int[8, 8]  {{9,0,9,0,9,0,9,0},
                                     {0,9,0,9,0,9,0,9},
                                     {9,0,9,0,9,0,9,0},
                                     {0,9,0,9,0,9,0,9},
@@ -521,12 +494,14 @@ namespace CheckerInterface
                                     {0,9,0,9,0,9,0,9},
                                     {9,0,9,0,9,0,9,0},
                                     {0,9,0,9,0,9,0,9}};
+                                    */
             this.placeCheckers();
             this.disableAll();
         }
-
-
-        // ################### Spot click events ################### //
+        
+        
+        #region spot clicks
+        
         private void spot01_Click(object sender, EventArgs e)
         {
             click(0, 1);
@@ -686,5 +661,6 @@ namespace CheckerInterface
         {
             click(7, 6);
         }
+        #endregion
     }
 }

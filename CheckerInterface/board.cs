@@ -45,16 +45,15 @@ namespace CheckerInterface
                                     { 1, 9, 1, 9, 1, 9, 1, 9},
                                     { 9, 1, 9, 1, 9, 1, 9, 1},
                                     { 1, 9, 1, 9, 1, 9, 1, 9}};
-
-
-            //this.b = new int[8, 8] {{ 9, 0, 9, 0, 9, 0, 9, 0},
+            
+            //this.b = new int[8, 8] {{ 9, 0, 9,-1, 9, 0, 9, 0},
             //                        { 0, 9, 0, 9, 0, 9, 0, 9},
-            //                        { 9, 0, 9, 0, 9, 0, 9, 0},
-            //                        { 0, 9, 0, 9, 0, 9, -1, 9},
-            //                        { 9, 0, 9, 0, 9, 1, 9, 0},
-            //                        { 0, 9, 0, 9,0 , 9, 0, 9},
-            //                        { 9, 0, 9,1, 9, 0, 9, 0},
-            //                        { 0, 9, 0, 9, 0, 9, 0, 9}};
+            //                        { 9, 0, 9,-1, 9, 0, 9, 0},
+            //                        { 0, 9, 0, 9, 0, 9, 0, 9},
+            //                        { 9, 0, 9, 0, 9,-1, 9, 0},
+            //                        { 0, 9, 0, 9, 0, 9, 0, 9},
+            //                        { 9,-1, 9,-1, 9,-1, 9, 0},
+            //                        { 2, 9, 0, 9, 0, 9, 0, 9}};
 
         }
 
@@ -63,6 +62,7 @@ namespace CheckerInterface
             this.flipBoard();
             this.validMoves.Clear();
             this.fillValidMoves();
+            
             this.turn = -this.turn;
             board = this.b;
 
@@ -90,7 +90,6 @@ namespace CheckerInterface
                 //this.validMoves.Clear();
                 if (Math.Abs(s.r - d.r) == 2 && findJumps(m.d))
                 {
-                    System.IO.File.Create("./again").Close();
                     return true;
                 }
             }
@@ -280,13 +279,10 @@ namespace CheckerInterface
                 b[kr, kc] = 0;
             }
 
-            if (m.d.r == 0)
+            if (m.d.r == 0 || m.d.r == 7)
             {
                 b[m.d.r, m.d.c] = 2;
             }
-
-
-            // Write board to a board.txt file
         }
 
         public bool over()

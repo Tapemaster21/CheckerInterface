@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <stdlib.h>
+#include <vector>
 
 
 using namespace std;
@@ -16,6 +17,12 @@ namespace Checkers
 		}
 		Point() {
 			r = 0; c = 0;
+		}
+		bool operator==(Point p) {
+			return (r == p.r && c == p.c);
+		}
+		bool operator!=(Point p) {
+			return !(r == p.r && c == p.c);
 		}
 	};
 	struct Move
@@ -50,23 +57,32 @@ namespace Checkers
 		}
 	}
 
-	bool putMove(Point points[],int length)
+	void pass() {
+		ofstream out("move.txt");
+		out << "pass";
+		out.close();
+	}
+	
+	void putMove(vector<Point> points)
 	{
 		ofstream out("move.txt");
 
-		for (int i = 0; i <= length;i++) {
-			
-			if (points[i].c > 7 || points[i].r < 0)
-				return false;
-			if (points[i].r > 7 || points[i].c < 0)
-				return false;
-			out << points[i].r << "," << points[i].c;
-			if (i < length-1) {
+		for each(Point point in points) 
+		{
+			if (point.c > 7 || point.r < 0)
+			{
+				return;
+			}
+			if (point.r > 7 || point.c < 0)
+			{
+				return;
+			}
+			out << point.r << "," << point.c;
+			if (point != points[points.size()-1]) 
+			{
 				out << ":";
 			}
-
 		}
 		out.close();
-		return false;
 	}		
 }
