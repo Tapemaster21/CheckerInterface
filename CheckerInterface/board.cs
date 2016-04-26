@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-//using System.IO;
 
 namespace CheckerInterface
 {
@@ -45,7 +40,7 @@ namespace CheckerInterface
                                     { 1, 9, 1, 9, 1, 9, 1, 9},
                                     { 9, 1, 9, 1, 9, 1, 9, 1},
                                     { 1, 9, 1, 9, 1, 9, 1, 9}};
-            
+
             //this.b = new int[8, 8] {{ 9, 0, 9,-1, 9, 0, 9, 0},
             //                        { 0, 9, 0, 9, 0, 9, 0, 9},
             //                        { 9, 0, 9,-1, 9, 0, 9, 0},
@@ -78,30 +73,24 @@ namespace CheckerInterface
             System.IO.File.WriteAllLines("./board.txt",lines);
         }
 
-        public bool putMove(Point s, Point d)
+        public int putMove(Point s, Point d)
         {
-
-            // We need to read in from text file
-
             Move m = new Move(s, d);
             if (this.validMoves.Contains(m))
             {
                 this.updateBoard(m);
-                //this.validMoves.Clear();
                 if (Math.Abs(s.r - d.r) == 2 && findJumps(m.d))
                 {
-                    return true;
+                    return 1;
                 }
             }
             else
             {
-                // invalid move
-                // instant game over
-                MessageBox.Show("move "+s.r +","+ s.c + " " + d.r + "," + d.c);
-                MessageBox.Show((this.turn == 1 ? "Player 2 " : "Player 1 ") + "won because "+ (this.turn == -1 ? "Player 2 " : "Player 1 ") +"made an invalid move.");
-                return false;
+                // invalid move, instant game over
+                return -1;
             }
-            return false;
+            // write board to log
+            return 0;
         }
 
         void flipBoard()

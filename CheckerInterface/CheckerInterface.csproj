@@ -88,8 +88,8 @@
     <None Include="Black.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="BlackQ.png" />
-    <Resource Include="RedQ.png" />
+    <Resource Include="BlackK.png" />
+    <Resource Include="RedK.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Walnut.bmp" />

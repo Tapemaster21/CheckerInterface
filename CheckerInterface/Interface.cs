@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 
@@ -17,7 +13,7 @@ namespace CheckerInterface
     {
         Board berd; 
         Move cur; // current move being performed
-        Bitmap red, black, redQ, blackQ;
+        Bitmap red, black, redK, blackK;
         bool player1 = false; // these tell if the player is human
         bool player2 = false;
         int turnTime; // in milliseconds
@@ -33,8 +29,8 @@ namespace CheckerInterface
             radioHuman2.Checked = true;
             red = new Bitmap(CheckerInterface.Properties.Resources.Red);
             black = new Bitmap(CheckerInterface.Properties.Resources.Black);
-            redQ = new Bitmap(CheckerInterface.Properties.Resources.RedQ);
-            blackQ = new Bitmap(CheckerInterface.Properties.Resources.BlackQ);
+            redK = new Bitmap(CheckerInterface.Properties.Resources.RedK);
+            blackK = new Bitmap(CheckerInterface.Properties.Resources.BlackK);
             buttonReset.Enabled = false;
         }
 
@@ -171,11 +167,11 @@ namespace CheckerInterface
                             }
                             else if (berd.b[r, c] == -2)
                             {
-                                spot.BackgroundImage = redQ;
+                                spot.BackgroundImage = redK;
                             }
                             else if (berd.b[r, c] == 2)
                             {
-                                spot.BackgroundImage = blackQ;
+                                spot.BackgroundImage = blackK;
                             }
                             else
                             {
@@ -194,11 +190,11 @@ namespace CheckerInterface
                             }
                             else if (berd.b[r, c] == 2)
                             {
-                                spot.BackgroundImage = redQ;
+                                spot.BackgroundImage = redK;
                             }
                             else if (berd.b[r, c] == -2)
                             {
-                                spot.BackgroundImage = blackQ;
+                                spot.BackgroundImage = blackK;
                             }
                             else
                             {
@@ -241,10 +237,8 @@ namespace CheckerInterface
                 {
                     if (m.s.r == r && m.s.c == c) // if click on checker
                     {
-                        //MessageBox.Show("Click 1 @: " + r + "," + c);
                         if (cur.s.r == 0 && cur.s.c == 0) // if this is first time click checker
                         {
-                            
                             spots.Enabled = false;
                             spots.BackColor = Color.Cyan;
                             cur.s = new Point(r, c);
@@ -253,34 +247,41 @@ namespace CheckerInterface
                         }
                         else // you're changing checker that you want to move, cur.s
                         {
-                            this.enableValids(2);
+                            if ((!player1 && berd.turn == -1) || (!player2 && berd.turn == 1)) // if ur robit
+                            {
+                                // robits dont need to change checkers, they're infallable beings 
+                                // containing all knowledge, and thusly do not need to click the wrong checker intitally. 
+                                MessageBox.Show((berd.turn == 1 ? "Player 2 " : "Player 1 ") + "won because " + (berd.turn == -1 ? "Player 2 " : "Player 1 ") + "made an invalid move.");
+                                return;
+                            }
+                            else // youre a human, so you mess up alllll the time
+                            {
+                                this.enableValids(2);
 
-                            spots.Enabled = false;
-                            spots.BackColor = Color.Cyan;
-                            cur.s = new Point(r, c);
-                            
-                            this.enableValids(0);
-                            this.enableValids(1);
+                                spots.Enabled = false;
+                                spots.BackColor = Color.Cyan;
+                                cur.s = new Point(r, c);
+
+                                this.enableValids(0);
+                                this.enableValids(1);
+                            }
                         }
-                        //MessageBox.Show("CUR S SET");
                         return;
                     }
                     else if (m.d.r == r && m.d.c == c) // if click in move spot
                     {
-                        //MessageBox.Show("Click 2 @: " + r + "," + c);
-                        //MessageBox.Show("curs "+cur.s.r + "," + cur.s.c);
                         cur.d = new Point(r, c);
-                        if(berd.putMove(cur.s, cur.d)) // if you have a second jump
+                        int banana = berd.putMove(cur.s, cur.d);
+                        if (banana == 1) // if you have a second jump
                         {
-                            if ((!player1 && berd.turn == -1) || (!player2 && berd.turn == 1))
+                            if ((!player1 && berd.turn == -1) || (!player2 && berd.turn == 1)) // if a robit
                             {
                                 this.placeCheckers();
-                                //jumpMode = true;
                                 cur.s = cur.d;
                                 cur.d = new Point();
-                                //inputAI();
+                                return;
                             }
-                            else
+                            else // human turn
                             {
                                 this.enableValids(2);
 
@@ -290,14 +291,14 @@ namespace CheckerInterface
                                 cur.d = new Point();
 
                                 this.enableValids(1);
+                                return;
                             }
                         }
-                        else // you're done
+                        else if (banana == 0) // if no second jump
                         {
                             this.enableValids(2);
-                            
+
                             cur = new Move();
-                            //berd.getBoard(ref berd.b);
                             this.placeCheckers();
                             if (berd.over())
                             {
@@ -311,10 +312,17 @@ namespace CheckerInterface
                             }
                             return;
                         }
+                        else // you made invalid move ya dingus
+                        {
+                            MessageBox.Show((berd.turn == 1 ? "Player 2 " : "Player 1 ") + "won because " + (berd.turn == -1 ? "Player 2 " : "Player 1 ") + "made an invalid move.");
+                            return;
+                        }
 
                     }
                 }
             }
+            // Your clicks were made on something that isn't a move place or a checker and you messed up somehow. 
+            MessageBox.Show((berd.turn == 1 ? "Player 2 " : "Player 1 ") + "won because " + (berd.turn == -1 ? "Player 2 " : "Player 1 ") + "made an invalid move.");
         }
 
         private void processStart(int number)
@@ -514,8 +522,7 @@ namespace CheckerInterface
             this.placeCheckers();
             this.disableAll();
         }
-
-
+        
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             turnTime = comboBox1.Text == "Unlimited" ? -1 : (Convert.ToInt32(comboBox1.Text) * 1000);

@@ -73,9 +73,9 @@ namespace CheckerInterface.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap BlackQ {
+        internal static System.Drawing.Bitmap BlackK {
             get {
-                object obj = ResourceManager.GetObject("BlackQ", resourceCulture);
+                object obj = ResourceManager.GetObject("BlackK", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,9 +93,9 @@ namespace CheckerInterface.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap RedQ {
+        internal static System.Drawing.Bitmap RedK {
             get {
-                object obj = ResourceManager.GetObject("RedQ", resourceCulture);
+                object obj = ResourceManager.GetObject("RedK", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
