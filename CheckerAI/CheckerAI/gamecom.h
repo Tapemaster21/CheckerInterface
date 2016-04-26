@@ -9,6 +9,7 @@ using namespace std;
 
 namespace Checkers
 {
+	//You'll want to use this.
 	struct Point {
 		int r, c;
 		Point(int row, int col) {
@@ -25,6 +26,8 @@ namespace Checkers
 			return !(r == p.r && c == p.c);
 		}
 	};
+
+	//This is handy for filling valid moves list.
 	struct Move
 	{
 		Point s, d;
@@ -34,7 +37,14 @@ namespace Checkers
 		}
 	};
 
-	bool getGameBoard(int board[8][8])
+
+	//When calling this function the board is read from file and copied into the int array passed
+	//the board is always in the players perspective
+	//--meaning the board is oriented so you are at the bottom moving upwards
+	//--think two players at either end of a table
+	//you are always 1 and your opponent is always -1
+	//you cannot go on 9's and 0's are empty
+	void getGameBoard(int board[8][8])
 	{
 		int x, i;
 		ifstream fin;
@@ -52,7 +62,7 @@ namespace Checkers
 
 			}
 			fin.close();
-			return true;
+			return;
 			
 		}
 	}
@@ -63,6 +73,12 @@ namespace Checkers
 		out.close();
 	}
 	
+
+
+	//Pass a vector of all the Points(included Struct) you want to move to
+	//first point is the peice being moved
+	//second is where it is moved to
+	//third forth etc.. are for continual jumping
 	void putMove(vector<Point> points)
 	{
 		ofstream out("move.txt");

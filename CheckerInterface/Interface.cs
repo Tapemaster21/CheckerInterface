@@ -208,6 +208,7 @@ namespace CheckerInterface
                 }
             }
             if (berd.turn == 1){ berd.rotate180(); }
+            this.Refresh();
         }
         
         private void click(int r, int c)
@@ -304,6 +305,7 @@ namespace CheckerInterface
                             {
                                 string player = (berd.turn == 1 ? "Player 2 " : "Player 1 ");
                                 MessageBox.Show(player + "won!");
+                                buttonReset.Focus();
                                 return;
                             }
                             else
@@ -480,6 +482,8 @@ namespace CheckerInterface
             buttonReset.Enabled = true;
             berd = new Board();
 
+            System.IO.File.Create("./log.txt").Close();
+
             berd.getBoard(ref berd.b);
             this.placeCheckers();
 
@@ -521,12 +525,19 @@ namespace CheckerInterface
                                     */
             this.placeCheckers();
             this.disableAll();
+            buttonStart.Focus();
         }
-        
+
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             turnTime = comboBox1.Text == "Unlimited" ? -1 : (Convert.ToInt32(comboBox1.Text) * 1000);
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("notepad.exe", "./log.txt");
+        }
+
 
         #region spot clicks
 
@@ -674,8 +685,6 @@ namespace CheckerInterface
         {
             click(7, 0);
         }
-
-
         private void spot72_Click(object sender, EventArgs e)
         {
             click(7, 2);

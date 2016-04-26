@@ -1,5 +1,4 @@
 #include "gamecom.h"
-#include <vector>
 #include <cmath>
 #include <time.h>
 #include <Windows.h>

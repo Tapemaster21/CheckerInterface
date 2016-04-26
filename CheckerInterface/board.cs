@@ -61,7 +61,7 @@ namespace CheckerInterface
             this.turn = -this.turn;
             board = this.b;
 
-            // write board to textfile?
+            // write board to textfile
             string[] lines = new string[8];
             for (int r = 0; r < 8; r++)
             {
@@ -71,6 +71,7 @@ namespace CheckerInterface
                 }
             }
             System.IO.File.WriteAllLines("./board.txt",lines);
+            printLog();
         }
 
         public int putMove(Point s, Point d)
@@ -303,5 +304,53 @@ namespace CheckerInterface
             return over;
             
         }
+
+        void printLog()
+        {
+            if(turn == 1) { this.flipBoard(); }
+            string[] lines = new string[13];
+            lines[0] = "╔════════════════════════╗";
+            for (int r = 1; r < 9; r++)
+            {
+                lines[r] += "║";
+                for (int c = 0; c < 8; c++)
+                {
+                    int thing = this.b[r-1, c];
+                    if (thing == 9 || thing == -9)
+                    {
+                        lines[r] += "███";
+                    }
+                    else if (thing == 0)
+                    {
+                        lines[r] += "   ";
+                    }
+                    else if (thing == 1)
+                    {
+                        lines[r] += " r ";
+                    }
+                    else if (thing == 2)
+                    {
+                        lines[r] += " R ";
+                    }
+                    else if (thing == -1)
+                    {
+                        lines[r] += " b ";
+                    }
+                    else if (thing == -2)
+                    {
+                        lines[r] += " B ";
+                    }
+                    
+                }
+                lines[r] += "║";
+            }
+            if (turn == 1) { this.flipBoard(); }
+            lines[9] = "╚════════════════════════╝";
+            System.IO.File.AppendAllLines("./log.txt", lines);
+        }
+
     } // end class
 }
+
+
+
