@@ -409,7 +409,7 @@ namespace CheckerInterface
             {
                 label3.Visible = true;
                 comboBox1.Visible = true;
-                turnTime = Convert.ToInt32(comboBox1.Text) * 1000;
+                turnTime = comboBox1.Text == "Unlimited" ? -1 : (Convert.ToInt32(comboBox1.Text) * 1000);
 
                 player1 = false;
                 label1.Show();
@@ -437,7 +437,7 @@ namespace CheckerInterface
             {
                 label3.Visible = true;
                 comboBox1.Visible = true;
-                turnTime = Convert.ToInt32(comboBox1.Text) * 1000;
+                turnTime = comboBox1.Text == "Unlimited" ? -1 : (Convert.ToInt32(comboBox1.Text) * 1000);
 
                 player2 = false;
                 label2.Show();
